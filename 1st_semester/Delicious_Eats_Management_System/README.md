@@ -3,7 +3,9 @@
 
 ## Overview 📚
 description: |
-  The Delicious Eats Food Delivery Management System is designed to automate the operations of a restaurant. It includes an admin interface for managing dishes and orders, as well as a customer interface for placing and managing orders. The system helps in reducing manual work and improving the efficiency of food delivery services.
+  The Delicious Eats Food Delivery Management System is designed to automate the operations of a restaurant.
+  It includes an admin interface for managing dishes and orders, as well as a customer interface for placing and managing orders.
+  The system helps in reducing manual work and improving the efficiency of food delivery services.
 
 project:
   course: "CIS 122 & 122L - Structured Programming with Lab"
