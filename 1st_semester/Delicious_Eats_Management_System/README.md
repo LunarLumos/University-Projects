@@ -12,7 +12,7 @@ project:
   author:
     name: "LunarLumos"
     github: "https://github.com/LunarLumos"
-    email: "lunar.lumos@example.com"
+    email: "aadil025@yahoo.com"
 
 ---
 
@@ -126,12 +126,6 @@ gcc -o food_delivery_system main.c
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-## Contact ✨
-
-**Author**: [LunarLumos](https://github.com/LunarLumos)  
-Email: **lunar.lumos@example.com**
-
 ---
 
 ## Conclusion 🚀
