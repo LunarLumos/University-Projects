@@ -1,0 +1,6 @@
+1,Coffee,Its a black coffee !,60,10
+2,wine,Its Haram brooo,1000,5
+3,Pasta,Its too delecious,120,20
+4,Noodles,Delecious,120,20
+5,potato,its kurmure,10,1
+6,Milk,its full of Vitamins,60,5
