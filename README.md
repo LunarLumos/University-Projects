@@ -14,6 +14,8 @@ This repository showcases a collection of projects developed during my **B.Sc. i
 CIS:
   1st_semester:
     - "Delicious Eats Food Delivery Management System" (Developed using C)
+  2nd_semester:
+    - "WDE> Sultans Dines website"
 ```
 ## Disclaimer
 
