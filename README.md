@@ -12,7 +12,7 @@ This repository showcases a collection of projects developed during my **B.Sc. i
 
 
 ### 1st Semester
-- [**Delicious Eats Food Delivery Management System**](#) (Developed using C)
+- [**SP: Delicious Eats Food Delivery Management System**](https://github.com/LunarLumos/University-Projects/tree/main/1st_semester/Delicious_Eats_Management_System) (Developed using C)
 
 ### 2nd Semester
 - [**WDE: Sultan's Dine Website**](https://lunarlumos.github.io/University-Projects/2nd_semester/WDE_Sultan_Dines/)
