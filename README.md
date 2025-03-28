@@ -13,10 +13,10 @@ This repository showcases a collection of projects developed during my **B.Sc. i
 ```yaml
 CIS:
   1st_semester:
-    - "Delicious Eats Food Delivery Management System" (Developed using C)
+    - "[Delicious Eats Food Delivery Management System](#) (Developed using C)"
   2nd_semester:
-    - "WDE> Sultans Dines website"
-```
+    - "[WDE: Sultans Dines website](https://lunarlumos.github.io/University-Projects/2nd_semester/WDE_Sultan_Dines/)"
+
 ## Disclaimer
 
 **Note**: Those are my academic peijects which was my semester assingment.
