@@ -10,12 +10,13 @@ This repository showcases a collection of projects developed during my **B.Sc. i
 
 ## Repository Structure
 
-```yaml
-CIS:
-  1st_semester:
-    - "[Delicious Eats Food Delivery Management System](#) (Developed using C)"
-  2nd_semester:
-    - "[WDE: Sultans Dines website](https://lunarlumos.github.io/University-Projects/2nd_semester/WDE_Sultan_Dines/)"
+
+### 1st Semester
+- [**Delicious Eats Food Delivery Management System**](#) (Developed using C)
+
+### 2nd Semester
+- [**WDE: Sultan's Dine Website**](https://lunarlumos.github.io/University-Projects/2nd_semester/WDE_Sultan_Dines/)
+
 
 ## Disclaimer
 
