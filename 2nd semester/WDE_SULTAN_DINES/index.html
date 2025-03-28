@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sultan's Dine - Premium Catering Services</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>123 Gourmet Street, Dhaka 1207</span>
+      </div>
+      <div class="separator"></div>
+      <div class="topbar-item">
+        <i class="far fa-clock"></i>
+        <span>Daily: 9.00 am to 11.00 pm</span>
+      </div>
+      <a href="tel:+8801712345678" class="topbar-item">
+        <i class="fas fa-phone-alt"></i>
+        <span>+880 1712 345678</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="#" class="logo">
+        <img src="images/logo.png" alt="Sultan's Dine">
+      </a>
+      
+      <nav class="navbar">
+        <button class="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        
+        <ul class="navbar-list">
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#menu">Menus</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <a href="#contact" class="btn btn-book">Book An Event</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-slider">
+      <div class="slide active">
+        <img src="images/hero-1.jpg" alt="Wedding Catering">
+        <div class="content">
+          <p class="subtitle">Premium Catering Services</p>
+          <h1>Exquisite Catering For Special Occasions</h1>
+          <p class="text">Creating memorable dining experiences for your most important events</p>
+          <a href="#contact" class="btn">Get A Quote</a>
+        </div>
+      </div>
+      
+      <div class="slide">
+        <img src="images/hero-2.jpg" alt="Corporate Events">
+        <div class="content">
+          <p class="subtitle">Authentic Cuisine</p>
+          <h1>Traditional Flavors Modern Presentation</h1>
+          <p class="text">Bringing the rich culinary heritage to your events !!</p>
+          <a href="#menu" class="btn">View Menus</a>
+        </div>
+      </div>
+      
+      <div class="slide">
+        <img src="images/hero-3.jpg" alt="Birthday Parties">
+        <div class="content">
+          <p class="subtitle">Customized Service</p>
+          <h1>Tailored Menus For Every Event</h1>
+          <p class="text">From intimate gatherings to grand celebrations</p>
+          <a href="#gallery" class="btn">See Our Work</a>
+        </div>
+      </div>
+    </div>
+    
+    <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
+    <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
+    
+    <a href="#contact" class="hero-btn">
+      <i class="far fa-calendar-alt"></i>
+      <span>Book Now</span>
+    </a>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-content">
+        <p class="subtitle">Our Story</p>
+        <h2 class="section-title">Authentic Catering Since 2010</h2>
+        <p class="section-text">
+          Sultan's Dine began as a small family-owned business with a passion for authentic cuisine. 
+          Over the years, we've grown into one of the most trusted catering services in the region.
+        </p>
+        
+        <div class="team-grid">
+          <div class="team-member">
+            <img src="images/stuff1.png" alt="Head Chef">
+            <h3>Chef Aifee</h3>
+            <p>Head Chef & Founder</p>
+            <p>10+ years experience</p>
+          </div>
+          <div class="team-member">
+            <img src="images/stuff2.png" alt="Event Manager">
+            <h3>Emilly</h3>
+            <p>Event Manager</p>
+            <p>Special Events Expert</p>
+          </div>
+          <div class="team-member">
+            <img src="images/stuff3.png" alt="Pastry Chef">
+            <h3>Laazam</h3>
+            <p>Pastry Chef</p>
+            <p>Dessert Specialist</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="about-banner">
+        <img src="images/about-banner.jpg" alt="Our Restaurant">
+      </div>
+    </div>
+  </section>
+
+<!-- Menu Section -->
+<section class="menu" id="menu">
+  <div class="container">
+    <p class="subtitle">Our Specialties</p>
+    <h2 class="section-title">Event Menus</h2>
+    
+    <!-- Menu Category Buttons -->
+    <div class="menu-categories">
+      <button class="menu-category active" data-category="wedding">Weddings</button>
+      <button class="menu-category" data-category="corporate">Corporate</button>
+      <button class="menu-category" data-category="birthday">Birthdays</button>
+      <button class="menu-category" data-category="special">Special Occasions</button>
+    </div>
+    
+    <!-- Wedding Menu -->
+    <div class="menu-grid active" id="wedding-menu">
+      <div class="menu-item">
+        <img src="images/menu-1.jpg" alt="Royal Wedding Package">
+        <div class="details">
+          <h3>Royal Wedding Package</h3>
+          <p>7-course meal with premium selections including beef, fish, and traditional biryani</p>
+          <span class="price">৳1,200 per person</span>
+        </div>
+      </div>
+      <!-- More wedding menu items -->
+    </div>
+    
+    <!-- Corporate Menu -->
+    <div class="menu-grid" id="corporate-menu">
+      <div class="menu-item">
+        <img src="images/menu-2.jpg" alt="Executive Lunch">
+        <div class="details">
+          <h3>Executive Lunch</h3>
+          <p>Sophisticated buffet with international and local cuisine options</p>
+          <span class="price">৳800 per person</span>
+        </div>
+      </div>
+      <!-- More corporate menu items -->
+    </div>
+    
+    <!-- Birthday Menu -->
+    <div class="menu-grid" id="birthday-menu">
+      <div class="menu-item">
+        <img src="images/menu-3.jpg" alt="Birthday Special Package">
+        <div class="details">
+          <h3>Birthday Special Package</h3>
+          <p>Customized cakes, appetizers, and refreshing drinks to make every birthday memorable</p>
+          <span class="price">৳600 per person</span>
+        </div>
+      </div>
+      <!-- More birthday menu items -->
+    </div>
+    
+    <!-- Special Occasions Menu -->
+    <div class="menu-grid" id="special-menu">
+      <div class="menu-item">
+        <img src="images/menu-4.jpg" alt="Special Occasions Package">
+        <div class="details">
+          <h3>Special Occasions Package</h3>
+          <p>A curated selection of gourmet dishes perfect for celebrations and milestones</p>
+          <span class="price">৳1,000 per person</span>
+        </div>
+      </div>
+      <!-- More special occasion menu items -->
+    </div>
+  </div>
+</section>
+
+
+  <!-- Gallery Section -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <p class="subtitle">Our Work</p>
+      <h2 class="section-title">Event Gallery</h2>
+      
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="images/gallery-1.jpg" alt="Wedding Reception">
+          <div class="overlay">
+            <h3>Grand Wedding Reception</h3>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="images/gallery-2.jpg" alt="Corporate Dinner">
+          <div class="overlay">
+            <h3>Corporate Gala Dinner</h3>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="images/gallery-3.jpg" alt="Birthday Party">
+          <div class="overlay">
+            <h3>Luxury Birthday Celebration</h3>
+          </div>
+        </div>
+        <!-- More gallery items -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews" id="reviews">
+    <div class="container">
+      <br>
+      <h1 class="subtitle">Client Feedback</h1>
+      <!-- <h2 class="section-title">Customer Reviews</h2>-->
+      
+      <div class="review-slider">
+        <div class="review active">
+          <div class="quote"><i class="fas fa-quote-left"></i></div>
+          <p class="text">
+            Sultan's Dine catered our daughter's wedding and exceeded all expectations. The food was exceptional!
+          </p>
+          <div class="client">
+            <img src="images/client-1.jpg" alt="Mr. Ahmed">
+            <h4>Ms. Ahmed</h4>
+            <p>Wedding Client</p>
+          </div>
+        </div>
+        
+        <div class="review">
+          <div class="quote"><i class="fas fa-quote-left"></i></div>
+          <p class="text">
+            For our annual conference, Sultan's Dine delivered flawless service and delicious food.
+          </p>
+          <div class="client">
+            <img src="images/client-2.jpg" alt="Ms. Rahman">
+            <h4>Ms. Rahman</h4>
+            <p>Corporate Client</p>
+          </div>
+        </div>
+        
+        <div class="review">
+          <div class="quote"><i class="fas fa-quote-left"></i></div>
+          <p class="text">
+            They made my mother's 70th birthday celebration truly special with their customized menu.
+          </p>
+          <div class="client">
+            <img src="images/client-3.jpg" alt="Khan Family">
+            <h4>Khan Family</h4>
+            <p>Birthday Celebration</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="slider-dots"></div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-form">
+        <div class="form-content">
+          <h2>Request A Quote</h2>
+          <form>
+            <div class="form-group">
+              <input type="text" placeholder="Your Name" required>
+              <input type="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+              <input type="tel" placeholder="Phone Number" required>
+              <select required>
+                <option value="">Event Type</option>
+                <option>Wedding</option>
+                <option>Corporate</option>
+                <option>Birthday</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="date" required>
+              <input type="number" placeholder="Number of Guests" required>
+            </div>
+            <textarea placeholder="Special Requests"></textarea>
+            <button type="submit" class="btn">Submit Request</button>
+          </form>
+        </div>
+        
+        <div class="contact-info">
+          <h2>Contact Us</h2>
+          <div class="info-item">
+            <i class="fas fa-phone-alt"></i>
+            <p>+880 1712 345678</p>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>123 Gourmet Street, Dhaka 1207</p>
+          </div>
+          <div class="info-item">
+            <i class="far fa-clock"></i>
+            <p>Monday to Sunday<br>9:00 am - 11:00 pm</p>
+          </div>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-col">
+          <img src="images/logo.png" alt="Sultan's Dine" class="footer-logo">
+          <p>Premium catering services for all your special occasions.</p>
+          <div class="footer-social">
+            <a href="https://www.facebook.com/LunarLumos"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/merely_aadil/"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#menu">Menus</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="#">Wedding Catering</a></li>
+            <li><a href="#">Corporate Events</a></li>
+            <li><a href="#">Birthday Parties</a></li>
+            <li><a href="#">Private Dinners</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Contact Info</h3>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>123 Gourmet Street, Dhaka 1207</p>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <p>+880 1712 345678</p>
+          </div>
+          <div class="contact-item">
+            <i class="far fa-envelope"></i>
+            <p>info@sultansdine.com</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        <p>&copy; 2025 Sultan's Dine. All Rights Reserved | Developed by @LunarLumos</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <a href="#home" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+
+  <script src="script.js"></script>
+</body>
+</html>
