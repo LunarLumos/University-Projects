@@ -38,8 +38,8 @@ is intended for assignment submission and portfolio demonstration.
 --------------------------------------------
 
 🔗 Visit the live site:  
-https://your-deployment-link.com  
-*(Replace this with your actual Netlify or GitHub Pages URL)*
+[https://your-deployment-link.com  ](https://lunarlumos.github.io/University-Projects/2nd_semester/wed%3Esultan_dines/)
+
 
 --------------------------------------------
 🖼️ Preview (Placeholder Collage)
