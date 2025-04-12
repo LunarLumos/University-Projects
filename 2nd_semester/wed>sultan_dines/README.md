@@ -1,6 +1,4 @@
 
-```markdown
-============================================
 🍽️ Sultan's Dine – Catering Website
 ============================================
 
@@ -116,5 +114,4 @@ to design and implement an engaging, functional, and accessible web
 interface that could be realistically used by a small catering business.
 
 
-============================================
-```
+
