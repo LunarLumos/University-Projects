@@ -5,7 +5,7 @@
 ============================================
 
 Author     : Aadil  
-Course     : CIS 122 & 122L – Structured Programming with Lab  
+Course     : Website Development Essentials 
 Semester   : Spring 2025  
 Email      : aadil025@yahoo.com  
 GitHub     : https://github.com/LunarLumos  
@@ -43,12 +43,6 @@ requirements into a fully functional web interface.
 🔗 Click here to access the live website:  
 👉 https://lunarlumos.github.io/University-Projects/2nd_semester/wed%3Esultan_dines/
 
---------------------------------------------
-🖼️ Project Preview
---------------------------------------------
-
-![Sultan's Dine Website Preview](https://i.imgur.com/kqNB4jQ.jpeg)  
-> This is a placeholder collage image. Please replace it with actual website screenshots.
 
 --------------------------------------------
 📁 Folder Structure
@@ -63,7 +57,7 @@ requirements into a fully functional web interface.
 │   ├── gallery/       # Gallery thumbnails  
 │   └── menu/          # Food category images  
 ├── README.md          # Project documentation (this file)  
-└── LICENSE            # MIT license file  
+.
 
 --------------------------------------------
 🛠️ Technologies Used
@@ -110,12 +104,6 @@ requirements into a fully functional web interface.
 [ ] Dark mode toggle for accessibility  
 [ ] Language translation support (English/Bangla)
 
---------------------------------------------
-📜 License
---------------------------------------------
-
-This project is open-sourced under the **MIT License**.  
-Please refer to the LICENSE file for more details.
 
 --------------------------------------------
 🧠 Conclusion
@@ -127,8 +115,6 @@ responsive website from scratch. I have applied classroom knowledge
 to design and implement an engaging, functional, and accessible web  
 interface that could be realistically used by a small catering business.
 
-> “Web development is not just about code — it's about communication,  
-> design, functionality, and the user’s experience.”
 
 ============================================
 ```
