@@ -18,35 +18,32 @@ Project    : Sultan’s Dine – Catering Website
 📦 Project Description
 --------------------------------------------
 
-Sultan’s Dine is a fully responsive, multi-section catering website
+Sultan’s Dine is a fully responsive, multi-section catering website  
 created using HTML, CSS, and JavaScript.
 
 The website features:
-  - A dynamic hero slider
-  - Interactive category-based food menus
-  - A photo gallery
-  - Client testimonials section
-  - A functional contact/booking form
-  - A scroll-to-top button
-  - A sticky responsive navigation bar
+  - A dynamic hero slider  
+  - Interactive category-based food menus  
+  - A photo gallery  
+  - Client testimonials section  
+  - A functional contact/booking form  
+  - A scroll-to-top button  
+  - A sticky responsive navigation bar  
 
-This project simulates a real-world catering brand website and 
+This project simulates a real-world catering brand website and  
 is intended for assignment submission and portfolio demonstration.
 
 --------------------------------------------
 🌐 Live Preview
 --------------------------------------------
 
-🔗 Visit the live site:  
-[https://your-deployment-link.com  ](https://lunarlumos.github.io/University-Projects/2nd_semester/wed%3Esultan_dines/)
-
+🔗 **[👉 Click here to view the live website](https://lunarlumos.github.io/University-Projects/2nd_semester/wed%3Esultan_dines/)**  
 
 --------------------------------------------
 🖼️ Preview (Placeholder Collage)
 --------------------------------------------
 
 ![Website Preview Collage](https://i.imgur.com/kqNB4jQ.jpeg)  
-> Replace this image with your actual screenshots collage
 
 --------------------------------------------
 📁 File Structure
