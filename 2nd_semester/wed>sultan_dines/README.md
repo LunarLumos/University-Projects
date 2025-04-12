@@ -45,8 +45,8 @@ requirements into a fully functional web interface.
 --------------------------------------------
 📁 Folder Structure
 --------------------------------------------
+```
 
-.
 ├── index.html         # Main HTML structure  
 ├── styles.css         # External stylesheet with all custom styles  
 ├── script.js          # JavaScript for sliders, navigation, form, etc.  
@@ -55,8 +55,8 @@ requirements into a fully functional web interface.
 │   ├── gallery/       # Gallery thumbnails  
 │   └── menu/          # Food category images  
 ├── README.md          # Project documentation (this file)  
-.
 
+```
 --------------------------------------------
 🛠️ Technologies Used
 --------------------------------------------
