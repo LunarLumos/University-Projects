@@ -1,6 +1,4 @@
 
----
-
 ```markdown
 ============================================
 🍽️ Sultan's Dine – Catering Website
@@ -11,7 +9,6 @@ Course     : CIS 122 & 122L – Structured Programming with Lab
 Semester   : Spring 2025  
 Email      : aadil025@yahoo.com  
 GitHub     : https://github.com/LunarLumos  
-
 Project    : Sultan’s Dine – Catering Website
 
 --------------------------------------------
@@ -19,92 +16,97 @@ Project    : Sultan’s Dine – Catering Website
 --------------------------------------------
 
 Sultan’s Dine is a fully responsive, multi-section catering website  
-created using HTML, CSS, and JavaScript.
+built using HTML, CSS, and JavaScript.
 
-The website features:
-  - A dynamic hero slider  
-  - Interactive category-based food menus  
-  - A photo gallery  
-  - Client testimonials section  
-  - A functional contact/booking form  
-  - A scroll-to-top button  
-  - A sticky responsive navigation bar  
+The website includes:
+  - A dynamic hero image slider  
+  - Filterable menu based on event type (Wedding, Corporate, etc.)  
+  - Image gallery section  
+  - Rotating client testimonials  
+  - Responsive contact & booking form  
+  - Sticky navigation bar and scroll-to-top functionality  
 
-This project simulates a real-world catering brand website and  
-is intended for assignment submission and portfolio demonstration.
+This website was created as an academic project but follows  
+real-world layout and interactivity standards.
 
 --------------------------------------------
 🌐 Live Preview
 --------------------------------------------
 
-🔗 **[👉 Click here to view the live website](https://lunarlumos.github.io/University-Projects/2nd_semester/wed%3Esultan_dines/)**  
+🔗 Click here to try the live site:  
+👉 https://lunarlumos.github.io/University-Projects/2nd_semester/wed%3Esultan_dines/
 
 --------------------------------------------
-🖼️ Preview (Placeholder Collage)
+🖼️ Project Preview
 --------------------------------------------
 
-![Website Preview Collage](https://i.imgur.com/kqNB4jQ.jpeg)  
+![Sultan's Dine Website Preview](https://i.imgur.com/kqNB4jQ.jpeg)  
+> Replace this collage with actual screenshots of your project
 
 --------------------------------------------
-📁 File Structure
+📁 Folder Structure
 --------------------------------------------
 
 .
 ├── index.html         # Main structure  
-├── styles.css         # Site-wide styles and responsiveness  
-├── script.js          # Sliders, scroll, form validation  
-├── images/            # Hero, menu, gallery images  
-└── README.md          # Project info and instructions  
+├── styles.css         # Styling and responsiveness  
+├── script.js          # Sliders, menu filter, scroll, form validation  
+├── images/            # Hero images, gallery, menu thumbnails  
+│   ├── hero/          # Hero slider assets  
+│   ├── gallery/       # Event images  
+│   └── menu/          # Category icons  
+├── README.md          # Project documentation  
+└── LICENSE            # MIT open-source license  
 
 --------------------------------------------
 🛠️ Technologies Used
 --------------------------------------------
 
-- HTML5 (semantic structure)  
-- CSS3 (Flexbox, Grid, transitions, variables)  
-- JavaScript (vanilla JS for interactivity)  
-- Google Fonts (Playfair Display, Poppins)  
-- Font Awesome (for icons)  
+- HTML5         : Semantic structure  
+- CSS3          : Flexbox, Grid, variables, transitions  
+- JavaScript    : Vanilla JS for all DOM interactions  
+- Google Fonts  : Playfair Display, Poppins  
+- Font Awesome  : Icons for UI enhancement  
 
 --------------------------------------------
-✅ Features
+✅ Features Implemented
 --------------------------------------------
 
-[+] Hero image slider (auto + manual)  
+[+] Hero image slider (automatic + manual)  
+[+] Category-based menu filter (wedding, corporate, birthday, etc.)  
+[+] Responsive grid gallery with hover effects  
+[+] Rotating testimonial/review carousel  
+[+] Contact & booking form with HTML5 + JS validation  
 [+] Scroll-to-top button  
-[+] Responsive gallery section  
-[+] Menu filter (wedding, corporate, etc.)  
-[+] Booking/contact form (HTML5 + JS validation)  
+[+] Fully mobile responsive  
 [+] Sticky navbar with mobile toggle  
-[+] Fully mobile-responsive layout  
 
 --------------------------------------------
 📈 Future Enhancements
 --------------------------------------------
 
-[ ] Connect form to a backend (PHP/Firebase)  
-[ ] Admin dashboard for managing menu items  
-[ ] Add animations using AOS or GSAP  
-[ ] Add dark mode toggle  
+[ ] Connect form to backend (e.g. Firebase, PHP)  
+[ ] Admin dashboard to manage menu items  
+[ ] Scroll-based animations (AOS.js or GSAP)  
+[ ] Dark mode toggle  
 [ ] Multilingual support  
 
 --------------------------------------------
 📜 License
 --------------------------------------------
 
-MIT License. See LICENSE file for more details.
+MIT License. See LICENSE file for terms and usage.
 
 --------------------------------------------
 🧠 Notes
 --------------------------------------------
 
-This website was built from scratch with no frameworks,  
-purely to demonstrate web development skills and responsive design.  
-All interactivity is handled using vanilla JavaScript.
+This website was handcrafted without frameworks to demonstrate  
+practical frontend development skills. Layouts are responsive,  
+code is modular, and features are fully functional using core  
+HTML, CSS, and JavaScript.
 
-> “The code was hand-prepped, like any good meal.”
+> “Design with clarity, build with purpose.”
 
---------------------------------------------
+============================================
 ```
-
----
