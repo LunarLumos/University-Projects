@@ -30,7 +30,7 @@ sub banner {
     print "${YELLOW}Stellarisys is a smart log detection tool that helps you quickly uncover and understand past events from system logs. It makes monitoring and analyzing your data easier by highlighting important patterns, so you can stay ahead of potential issues.\n";
     print "${RESET}\n";
     print "${BOLD}${MAGENTA}       Created by ${BLINK}${UNDERLINE}Lunar Lumos${RESET}\n";
-    print "${CYAN}Department of Cyber Security\n";
+    print "${CYAN}Department of CIS\n";
     print "${CYAN}Daffodil International University${RESET}\n";
 }
 
