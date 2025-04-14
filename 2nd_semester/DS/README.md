@@ -80,8 +80,8 @@ $ ./stellarisys.pl < test_logs.txt
 $ ./stellarisys.pl --config
 [⚙] CURRENT CONFIG:
 TELEGRAM:
-  BOT_TOKEN = 7705705217:AAGzsRTMcSbPp5GOhKFFYJ9vO6AdT4_Nzx8
-  CHAT_ID = -4780545288
+  BOT_TOKEN = #Your Bot Token
+  CHAT_ID = #Your chat ID
 COLOR_SCHEME: Enabled
 THRESHOLDS:
   BRUTE_FORCE = 5 attempts
