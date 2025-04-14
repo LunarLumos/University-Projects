@@ -6,7 +6,7 @@
 
 $ cat /proc/stellarisys/meta
 AUTHOR:    Aadil
-COURSE:    Cyber Security Systems
+COURSE:    Data Structure & Lab
 SEMESTER:  Spring 2025
 EMAIL:     aadil025@yahoo.com
 GITHUB:    github.com/LunarLumos
