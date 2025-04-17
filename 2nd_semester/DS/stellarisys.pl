@@ -18,6 +18,7 @@ my $BLINK = "\e[5m";
 
 banner();
 
+#banner
 sub banner {
     print "${CYAN}\n";
     print "    
@@ -34,6 +35,7 @@ sub banner {
     print "${CYAN}Daffodil International University${RESET}\n";
 }
 
+#replace your actual telegram id
 my $BOT_TOKEN = "7705705217:AAGzsRTMcSbPp5GOhKFFYJ9vO6AdT4_Nzx8";
 my $CHAT_ID = "-4780545288";
 
@@ -66,6 +68,7 @@ sub s_massage {
     }
 }
 
+#Data Structures 
 package LinkedList;
 sub new { bless { head => undef }, shift }
 
@@ -83,6 +86,7 @@ sub show_all {
     }
 }
 
+#stack but unused 
 package Stack;
 sub new { bless { items => [] }, shift }
 
@@ -90,6 +94,7 @@ sub push { push @{$_[0]->{items}}, $_[1] }
 
 sub pop { pop @{$_[0]->{items}} }
 
+#queue for bruteforce detection
 package Queue;
 sub new { bless { items => [] }, shift }
 
@@ -99,6 +104,7 @@ sub dequeue { shift @{$_[0]->{items}} }
 
 sub size { scalar @{$_[0]->{items}} }
 
+#graph for ip mapping 
 package Graph;
 sub new { bless { nodes => {} }, shift }
 
