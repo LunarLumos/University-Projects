@@ -36,8 +36,8 @@ sub banner {
 }
 
 #replace your actual telegram id
-my $BOT_TOKEN = "7705705217:AAGzsRTMcSbPp5GOhKFFYJ9vO6AdT4_Nzx8";
-my $CHAT_ID = "-4780545288";
+my $BOT_TOKEN = "    ";
+my $CHAT_ID = "    ";
 
 sub clean {
     my ($msg) = @_;
