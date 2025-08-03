@@ -1,0 +1,19 @@
+{
+    "root": "Brute Force Attempt",
+    "children": [
+        {
+            "node": "Multiple Failed Logins",
+            "children": [
+                {"node": "IP 192.168.1.105", "children": []},
+                {"node": "IP 192.168.1.110", "children": []}
+            ]
+        },
+        {
+            "node": "Possible Credential Stuffing",
+            "children": [
+                {"node": "Common Passwords Used", "children": []},
+                {"node": "High Frequency", "children": []}
+            ]
+        }
+    ]
+}
