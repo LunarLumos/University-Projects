@@ -79,24 +79,31 @@ EDUCATIONAL VALUE
 
 INSTALLATION & RUNNING
 ----------------------
-
 1. Clone the repository:
-   git clone https://github.com/yourusername/cerberon.git
-
+```bash
+   git clone https://github.com/LunarLumos/University-Projects/tree/main/Algorithm/Cerberon
+```
 2. Navigate into project directory:
+```bash
    cd cerberon
-
+```
 3. Create and activate virtual environment:
+```bash
    python -m venv venv
-   source venv/bin/activate     (Windows: venv\Scripts\activate)
-
+   source venv/bin/activate
+```
 4. Install required packages:
+
+```bash
    pip install -r requirements.txt
 
+```
 5. Launch the backend server:
-   python backend/main.py
+```bash
+python app.py
 
-6. Open frontend/index.html in a web browser.
+```
+6. Open http://127.0.0.1:5000 in a web browser.
 
 USAGE INSTRUCTIONS
 ------------------
