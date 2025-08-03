@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerberon - Algorithm-Based Cyber Analyzer</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Cerberon</h1>
+            <p class="subtitle">Smart Algorithm-Based Cyber Analyzer</p>
+        </header>
+
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#" onclick="showModule('password')">Password Attack Simulator</a></li>
+                <li><a href="#" onclick="showModule('log')">Log Analyzer & Sorter</a></li>
+                <li><a href="#" onclick="showModule('alert')">Tree-Based Alert Tracer</a></li>
+                <li><a href="#" onclick="showModule('phishing')">Phishing Redirect Tracker</a></li>
+                <li><a href="#" onclick="showModule('path')">Secure Network Path Finder</a></li>
+                <li><a href="#" onclick="showModule('delay')">Suspicious Delay Detection</a></li>
+                <li><a href="#" onclick="showModule('hacker')">Hacker Movement Optimizer</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <!-- Password Attack Simulator -->
+            <div id="password-module" class="module">
+                <h2>Password Attack Simulator</h2>
+                <div class="module-description">
+                    <p>Simulates how an attacker might use binary search vs linear search to crack passwords.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="password-target">Target Password:</label>
+                    <input type="text" id="password-target" value="admin">
+                    <button onclick="runPasswordAttack()">Run Simulation</button>
+                </div>
+                
+                <div class="results">
+                    <div class="result-section">
+                        <h3>Password List</h3>
+                        <div id="password-list" class="data-display"></div>
+                    </div>
+                    
+                    <div class="comparison">
+                        <div class="algorithm-result">
+                            <h3>Binary Search</h3>
+                            <div id="binary-result"></div>
+                            <img id="binary-image" class="visualization">
+                        </div>
+                        
+                        <div class="algorithm-result">
+                            <h3>Linear Search</h3>
+                            <div id="linear-result"></div>
+                            <img id="linear-image" class="visualization">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Analyzer & Sorter -->
+            <div id="log-module" class="module" style="display:none;">
+                <h2>Log Analyzer & Sorter</h2>
+                <div class="module-description">
+                    <p>Sorts cyber log data using Merge Sort and detects anomalies.</p>
+                </div>
+                
+                <div class="controls">
+                    <button onclick="runLogAnalysis()">Analyze Logs</button>
+                </div>
+                
+                <div class="results">
+                    <div class="result-section">
+                        <h3>Original Logs</h3>
+                        <div id="original-logs" class="data-display"></div>
+                    </div>
+                    
+                    <div class="sort-results">
+                        <div class="sort-result">
+                            <h3>Sorted by Time</h3>
+                            <div id="time-sorted-logs" class="data-display"></div>
+                            <img id="time-sort-image" class="visualization">
+                        </div>
+                        
+                        <div class="sort-result">
+                            <h3>Sorted by Severity</h3>
+                            <div id="severity-sorted-logs" class="data-display"></div>
+                            <img id="severity-sort-image" class="visualization">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tree-Based Alert Tracer -->
+            <div id="alert-module" class="module" style="display:none;">
+                <h2>Tree-Based Alert Tracer</h2>
+                <div class="module-description">
+                    <p>Visualizes and traverses a tree of interconnected security alerts.</p>
+                </div>
+                
+                <div class="controls">
+                    <button onclick="runAlertAnalysis()">Analyze Alert Tree</button>
+                </div>
+                
+                <div class="results">
+                    <div class="traversal-buttons">
+                        <button onclick="showTraversal('inorder')">Inorder</button>
+                        <button onclick="showTraversal('preorder')">Preorder</button>
+                        <button onclick="showTraversal('postorder')">Postorder</button>
+                        <button onclick="showTraversal('bfs')">BFS</button>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <img id="alert-tree-image" class="visualization">
+                    </div>
+                    
+                    <div class="traversal-result">
+                        <h3>Traversal Path</h3>
+                        <div id="traversal-path" class="data-display"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phishing Redirect Tracker -->
+            <div id="phishing-module" class="module" style="display:none;">
+                <h2>Phishing Redirect Tracker</h2>
+                <div class="module-description">
+                    <p>Simulates phishing redirection using BFS and DFS in a network graph.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="phishing-start">Start Node:</label>
+                    <select id="phishing-start"></select>
+                    
+                    <label for="phishing-end">End Node:</label>
+                    <select id="phishing-end"></select>
+                    
+                    <button onclick="runPhishingTracker()">Track Routes</button>
+                </div>
+                
+                <div class="results">
+                    <div class="visualization-container">
+                        <img id="phishing-graph-image" class="visualization">
+                    </div>
+                    
+                    <div class="path-results">
+                        <div class="path-result">
+                            <h3>BFS Path</h3>
+                            <div id="bfs-path" class="data-display"></div>
+                        </div>
+                        
+                        <div class="path-result">
+                            <h3>DFS Path</h3>
+                            <div id="dfs-path" class="data-display"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secure Network Path Finder -->
+            <div id="path-module" class="module" style="display:none;">
+                <h2>Secure Network Path Finder</h2>
+                <div class="module-description">
+                    <p>Finds shortest and safest paths in a network using Dijkstra's algorithm.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="path-start">Start Node:</label>
+                    <select id="path-start"></select>
+                    
+                    <label for="path-end">End Node:</label>
+                    <select id="path-end"></select>
+                    
+                    <button onclick="runPathFinder()">Find Paths</button>
+                </div>
+                
+                <div class="results">
+                    <div class="visualization-container">
+                        <img id="path-graph-image" class="visualization">
+                    </div>
+                    
+                    <div class="path-results">
+                        <div class="path-result">
+                            <h3>Shortest Path (Lowest Latency)</h3>
+                            <div id="shortest-path" class="data-display"></div>
+                        </div>
+                        
+                        <div class="path-result">
+                            <h3>Safest Path (Least Hops)</h3>
+                            <div id="safest-path" class="data-display"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suspicious Delay Detection -->
+            <div id="delay-module" class="module" style="display:none;">
+                <h2>Suspicious Delay Detection</h2>
+                <div class="module-description">
+                    <p>Detects suspicious network delays using Bellman-Ford algorithm.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="delay-start">Start Node:</label>
+                    <select id="delay-start"></select>
+                    
+                    <button onclick="runDelayDetection()">Analyze Network</button>
+                </div>
+                
+                <div class="results">
+                    <div class="visualization-container">
+                        <img id="delay-graph-image" class="visualization">
+                    </div>
+                    
+                    <div class="analysis-results">
+                        <div class="analysis-result">
+                            <h3>Node Distances</h3>
+                            <div id="node-distances" class="data-display"></div>
+                        </div>
+                        
+                        <div class="analysis-result">
+                            <h3>Suspicious Elements</h3>
+                            <div id="suspicious-elements" class="data-display"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hacker Movement Optimizer -->
+            <div id="hacker-module" class="module" style="display:none;">
+                <h2>Hacker Movement Optimizer</h2>
+                <div class="module-description">
+                    <p>Optimizes a hacker's route across multiple servers using TSP.</p>
+                </div>
+                
+                <div class="controls">
+                    <label for="hacker-nodes">Nodes to Visit (comma-separated):</label>
+                    <input type="text" id="hacker-nodes" value="1,2,3,4">
+                    
+                    <button onclick="runHackerOptimizer()">Optimize Route</button>
+                </div>
+                
+                <div class="results">
+                    <div class="visualization-container">
+                        <img id="hacker-graph-image" class="visualization">
+                    </div>
+                    
+                    <div class="optimization-results">
+                        <div class="optimization-result">
+                            <h3>Optimal Path (Exact)</h3>
+                            <div id="optimal-path" class="data-display"></div>
+                        </div>
+                        
+                        <div class="optimization-result">
+                            <h3>Heuristic Path (Approximate)</h3>
+                            <div id="heuristic-path" class="data-display"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>Cerberon - Algorithm-Based Cyber Analyzer | Educational Tool</p>
+    </footer>
+</body>
+</html>

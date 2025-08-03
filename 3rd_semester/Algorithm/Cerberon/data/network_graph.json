@@ -1,0 +1,31 @@
+{
+    "nodes": [
+        {"id": 1, "label": "User PC", "group": "user"},
+        {"id": 2, "label": "Router", "group": "network"},
+        {"id": 3, "label": "Firewall", "group": "security"},
+        {"id": 4, "label": "Web Server", "group": "server"},
+        {"id": 5, "label": "Database", "group": "server"},
+        {"id": 6, "label": "Attacker", "group": "threat"},
+        {"id": 7, "label": "Backup Server", "group": "server"},
+        {"id": 8, "label": "Admin Workstation", "group": "user"},
+        {"id": 9, "label": "Switch", "group": "network"},
+        {"id": 10, "label": "IDS", "group": "security"}
+    ],
+    "edges": [
+        {"from": 1, "to": 2, "label": "10ms", "weight": 10},
+        {"from": 2, "to": 3, "label": "5ms", "weight": 5},
+        {"from": 3, "to": 4, "label": "8ms", "weight": 8},
+        {"from": 4, "to": 5, "label": "15ms", "weight": 15},
+        {"from": 6, "to": 2, "label": "50ms", "weight": 50},
+        {"from": 6, "to": 4, "label": "120ms", "weight": 120},
+        {"from": 8, "to": 9, "label": "2ms", "weight": 2},
+        {"from": 9, "to": 3, "label": "4ms", "weight": 4},
+        {"from": 7, "to": 5, "label": "20ms", "weight": 20},
+        {"from": 4, "to": 10, "label": "6ms", "weight": 6},
+        {"from": 10, "to": 3, "label": "7ms", "weight": 7},
+        {"from": 2, "to": 9, "label": "3ms", "weight": 3},
+        {"from": 5, "to": 7, "label": "25ms", "weight": 25},
+        {"from": 9, "to": 10, "label": "9ms", "weight": 9},
+        {"from": 1, "to": 8, "label": "12ms", "weight": 12}
+    ]
+}
