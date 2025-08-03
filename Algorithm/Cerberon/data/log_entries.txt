@@ -1,8 +1,0 @@
-2023-05-01 08:15:23 WARNING Firewall blocked suspicious IP 192.168.1.105
-2023-05-01 08:16:45 INFO User admin logged in from 192.168.1.100
-2023-05-01 08:17:12 ERROR Database connection timeout
-2023-05-01 08:18:33 WARNING Multiple failed login attempts for user 'guest'
-2023-05-01 08:19:07 INFO Backup process started
-2023-05-01 08:20:51 CRITICAL Disk space below 5% on /dev/sda1
-2023-05-01 08:21:34 WARNING Unusual network activity from 192.168.1.110
-2023-05-01 08:22:19 INFO Scheduled maintenance completed
