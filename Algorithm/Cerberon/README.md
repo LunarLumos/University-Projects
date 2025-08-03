@@ -1,7 +1,8 @@
-=========================================================
-                   CERBERON CYBER ANALYZER                
-             Author: Aifee Aadil | Supervisor: Adnan Jihad
-=========================================================
+
+
+                                     CERBERON CYBER ANALYZER                
+                           Author: Aifee Aadil | Supervisor: Adnan Jihad
+             
 
 OVERVIEW
 --------
@@ -111,7 +112,7 @@ DEMO VIDEO
 ----------
 
 Watch Cerberon in action!  
-[Demo Video Link]: https://youtu.be/your-demo-video-link
+[Demo Video Link]: https://youtu.be/
 
 FUTURE IMPROVEMENTS
 -------------------
@@ -140,9 +141,9 @@ CONTACT
 -------
 
 Author: Aifee Aadil  
-GitHub: https://github.com/yourusername  
+GitHub: https://github.com/LunarLumos  
 LinkedIn: https://linkedin.com/in/aifeeaadil
 
-=========================================================
-                   END OF CERBERON REPORT                
-=========================================================
+
+                                         MADE WITH LOVE BY LUNAR LABS               
+
