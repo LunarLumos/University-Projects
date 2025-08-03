@@ -39,9 +39,9 @@ Projects are grouped by academic semester and course title. Each project is desi
 ---
 ### 🌐 3rd Semester
 
-- [**Website Development Essentials (WDE): Sultan’s Dine – Catering Website**](https://lunarlumos.github.io/University-Projects/2nd_semester/wed%3Esultan_dines/)  
-  **Technologies:** HTML, CSS, JavaScript  
-  A responsive, interactive catering website featuring a dynamic hero slider, menu filtering by event type, image gallery, testimonials, contact form with validation, and scroll-to-top functionality.
+- [**Cerberon (Algorithm): A Hands-on Cyber Analyzer for Learning and Simulation**](https://github.com/LunarLumos/University-Projects/tree/main/3rd_semester/Algorithm/Cerberon)  
+  **Technologies:** Python, HTML, CSS, JavaScript  
+  Cerberon is an interactive educational platform designed to bridge the gap between theory and practice in cybersecurity and algorithms.
 
 ---
 
@@ -81,3 +81,4 @@ Feel free to navigate each semester’s work, explore the documentation, or try 
 For collaboration, mentorship, or academic communication, don’t hesitate to reach out via email or GitHub.
 
 ---
+
