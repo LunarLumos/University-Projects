@@ -1,6 +1,4 @@
-Absolutely! Here’s a **full, polished, and luxurious `README.md`** for your Smart Budget Tracker project—fully textual, professional, and ready to impress:
 
-````markdown
 # Smart Budget Tracker 💎
 
 **Developer:** Aifee Aadil  
@@ -144,16 +142,4 @@ smart-budget-tracker/
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
-```
 
----
-
-This version is:  
-- **Complete** – covers project overview, features, tech stack, installation, usage, and acknowledgments.  
-- **Luxurious & professional** – premium wording, structured formatting, and clear sections.  
-- **Ready for GitHub** – no screenshots, fully textual, and easy to read.  
-
-If you want, I can **also make a “super condensed single-page professional README”** that looks even cleaner for GitHub judges.  
-
-Do you want me to do that?
-```
