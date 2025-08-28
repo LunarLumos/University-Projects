@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Take Control of Your Finances</h1>
+        <p class="hero-description">Smart Budget Tracker helps you manage your income, expenses, and budgets in one place with beautiful visual reports.</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('signup') }}" class="btn btn-primary">Get Started</a>
+            <a href="{{ url_for('about') }}" class="btn btn-secondary">Learn More</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <div class="floating-card income">
+            <h3>Income</h3>
+            <p>$5,250.00</p>
+        </div>
+        <div class="floating-card expense">
+            <h3>Expenses</h3>
+            <p>$3,120.50</p>
+        </div>
+        <div class="floating-card balance">
+            <h3>Balance</h3>
+            <p>$2,129.50</p>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <h2 class="section-title">Why Choose Smart Budget Tracker?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Track Income & Expenses</h3>
+            <p>Easily record all your financial transactions and categorize them for better insights.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Visual Reports</h3>
+            <p>Beautiful charts and graphs help you understand your spending patterns at a glance.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔔</div>
+            <h3>Budget Alerts</h3>
+            <p>Get notified when your spending in any category exceeds 40% of your income.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Responsive Design</h3>
+            <p>Access your financial data from any device - desktop, tablet, or mobile.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

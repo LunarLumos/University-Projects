@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+<div class="reports-header">
+    <h1>Financial Reports</h1>
+    <p>Visualize your financial data with interactive charts</p>
+</div>
+
+<div class="reports-grid">
+    <div class="report-card">
+        <h2>Spending by Category</h2>
+        <div class="chart-container">
+            <canvas id="spendingChart"></canvas>
+        </div>
+    </div>
+    
+    <div class="report-card">
+        <h2>Income vs Expenses (Last 6 Months)</h2>
+        <div class="chart-container">
+            <canvas id="incomeVsExpenseChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Spending by category chart
+    const spendingCtx = document.getElementById('spendingChart').getContext('2d');
+    const spendingChart = new Chart(spendingCtx, {
+        type: 'pie',
+        data: {
+            labels: [
+                {% for item in spending_report.data %}
+                    '{{ item.category }}',
+                {% endfor %}
+            ],
+            datasets: [{
+                data: [
+                    {% for item in spending_report.data %}
+                        {{ item.total }},
+                    {% endfor %}
+                ],
+                backgroundColor: [
+                    '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', 
+                    '#e74a3b', '#858796', '#f8f9fc', '#5a5c69'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Expenses by Category'
+                }
+            }
+        }
+    });
+
+    // Income vs Expenses chart
+    const incomeVsExpenseCtx = document.getElementById('incomeVsExpenseChart').getContext('2d');
+    const incomeVsExpenseChart = new Chart(incomeVsExpenseCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ income_vs_expense.labels | tojson }},
+            datasets: [
+                {
+                    label: 'Income',
+                    data: {{ income_vs_expense.income | tojson }},
+                    backgroundColor: '#1cc88a',
+                    borderColor: '#1cc88a',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Expenses',
+                    data: {{ income_vs_expense.expenses | tojson }},
+                    backgroundColor: '#e74a3b',
+                    borderColor: '#e74a3b',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

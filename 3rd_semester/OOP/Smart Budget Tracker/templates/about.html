@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="about-hero" style="background: linear-gradient(135deg, #4b6cb7, #182848); color: #fff; padding: 80px 20px; text-align:center; border-radius: 20px; margin-bottom: 40px;">
+    <h1 style="font-size:3rem; font-family:'Playfair Display', serif; margin-bottom:10px;">About Smart Budget Tracker</h1>
+    <p style="font-size:1.2rem; max-width:700px; margin:0 auto;">
+        A OOP, professional personal finance management system designed for real-life usage, developed for Daffodil International University under the guidance of Teacher <strong>Mr. Md. Nasimul Kader</strong> and developed by <strong>Aifee Aadil</strong>.
+    </p>
+</section>
+
+<!-- Teacher & Developer Highlight Section -->
+<section class="team-card" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:40px; margin-bottom:50px;">
+    <div style="flex:0 1 650px; background: #fff; border-radius:20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); padding:30px; display:flex; align-items:center; gap:50px; justify-content:center; flex-wrap:wrap;">
+
+        <!-- Teacher Info -->
+        <div style="text-align:center;">
+            <img src="{{ url_for('static', filename='images/teacher.jpg') }}" alt="Teacher Nasimul Kader" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #4b6cb7;">
+            <h3 style="font-family:'Poppins', sans-serif; margin-top:10px; margin-bottom:0;">Mr. Md. Nasimul Kader</h3>
+            <p style="font-size:0.85rem; color:#555;">Supervisor / Teacher</p>
+        </div>
+
+        <!-- Developer Info -->
+        <div style="text-align:center;">
+            <img src="{{ url_for('static', filename='images/developer.jpg') }}" alt="Aifee Aadil" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #4b6cb7;">
+            <h3 style="font-family:'Poppins', sans-serif; margin-top:10px; margin-bottom:0;">Aifee Aadil</h3>
+            <p style="font-size:0.85rem; color:#555;">Developer / Student</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Project Overview -->
+<section class="project-overview" style="max-width:1000px; margin:0 auto; margin-bottom:50px;">
+    <div style="background:#f7f9fc; padding:40px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+        <h2 style="font-family:'Playfair Display', serif; color:#182848; margin-bottom:20px;">Project Overview</h2>
+        <p style="font-size:1rem; color:#333; line-height:1.6;">
+            Smart Budget Tracker is a premium personal finance management system that allows users to track income, expenses, and budgets in one centralized platform. With interactive charts, visual reports, and budget alerts, it helps users make informed financial decisions with ease.
+        </p>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features" style="display:flex; flex-wrap:wrap; gap:30px; justify-content:center; margin-bottom:50px;">
+    <div style="flex:0 1 250px; background:#fff; padding:30px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s; text-align:center;">
+        <h3 style="margin-bottom:10px; color:#4b6cb7;">Income & Expense Tracking</h3>
+        <p>Easily record, categorize, and manage all your transactions with premium design.</p>
+    </div>
+    <div style="flex:0 1 250px; background:#fff; padding:30px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s; text-align:center;">
+        <h3 style="margin-bottom:10px; color:#4b6cb7;">Budget Management</h3>
+        <p>Set daily, monthly, or yearly budgets and get intelligent alerts for overspending.</p>
+    </div>
+    <div style="flex:0 1 250px; background:#fff; padding:30px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s; text-align:center;">
+        <h3 style="margin-bottom:10px; color:#4b6cb7;">Visual Reports</h3>
+        <p>Beautiful interactive charts to visualize spending, income, and budget efficiency.</p>
+    </div>
+    <div style="flex:0 1 250px; background:#fff; padding:30px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s; text-align:center;">
+        <h3 style="margin-bottom:10px; color:#4b6cb7;">Responsive Design</h3>
+        <p>Access your financial dashboard from any device with a modern, elegant interface.</p>
+    </div>
+</section>
+
+<!-- Technology Stack -->
+<section class="tech-stack" style="max-width:1000px; margin:0 auto; margin-bottom:50px; display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
+    <div style="flex:0 1 250px; background:#fff; padding:25px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center;">
+        <h3 style="margin-bottom:10px; color:#182848;">Backend</h3>
+        <p>Python, Flask, SQLite</p>
+    </div>
+    <div style="flex:0 1 250px; background:#fff; padding:25px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center;">
+        <h3 style="margin-bottom:10px; color:#182848;">Frontend</h3>
+        <p>HTML5, CSS3, JavaScript, Chart.js</p>
+    </div>
+    <div style="flex:0 1 250px; background:#fff; padding:25px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center;">
+        <h3 style="margin-bottom:10px; color:#182848;">Design</h3>
+        <p>Custom CSS with luxurious gradients, shadows, smooth transitions, and animations</p>
+    </div>
+</section>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
