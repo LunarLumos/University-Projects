@@ -1,5 +1,5 @@
 
-# Smart Budget Tracker 💎
+# Smart Budget Tracker 
 
 **Developer:** Aifee Aadil  
 **University:** Daffodil International University  
