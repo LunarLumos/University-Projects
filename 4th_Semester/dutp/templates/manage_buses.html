@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bus Management • DUTP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <span class="navbar-text ml-auto">Bus Management • Welcome, {{ name }}</span>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Bus Management</h1>
+            </div>
+        </div>
+
+        <!-- All Buses Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-bus"></i> All Buses</h5>
+                        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#addBusModal">
+                            <i class="fas fa-plus"></i> Add New Bus
+                        </button>
+                    </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Note:</strong> Routes must have departure times set before buses can be assigned. 
+                                <a href="{{ url_for('manage_routes') }}" class="alert-link">Manage route times here</a>.
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <input type="text" id="busSearch" class="form-control" placeholder="Search buses by number, driver, or route...">
+                                </div>
+                            </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="busTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Bus Number</th>
+                                        <th>Driver</th>
+                                        <th>Route</th>
+                                        <th>Capacity</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for bus in buses %}
+                                    <tr>
+                                        <td>{{ bus.bus_id }}</td>
+                                        <td>{{ bus.bus_number }}</td>
+                                        <td>{{ bus.driver_name }}</td>
+                                        <td>{{ bus.route.route_name if bus.route else 'No Route' }}</td>
+                                        <td>{{ bus.capacity }}</td>
+                                        <td>
+                                            <span class="badge badge-{{ 'success' if bus.status == 'active' else 'danger' }}">
+                                                {{ bus.status.title() }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#editBusModal" onclick="editBus({{ bus.bus_id }}, '{{ bus.bus_number }}', '{{ bus.driver_name }}', {{ bus.capacity }}, {{ bus.route_id if bus.route_id else 'null' }})" title="Edit Bus">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary" onclick="toggleBusStatus({{ bus.bus_id }}, '{{ bus.status }}')" title="Toggle Status">
+                                                    <i class="fas fa-{{ 'ban' if bus.status == 'active' else 'check' }}"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger" onclick="deleteBus({{ bus.bus_id }}, '{{ bus.bus_number }}')" title="Delete Bus">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buses by Route Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-route"></i> Buses by Route</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for route in routes %}
+                        {% set route_buses = buses|selectattr('route_id', 'equalto', route.route_id)|list %}
+                        {% if route_buses %}
+                        <div class="route-section mb-4">
+                            <h6 class="text-primary">
+                                <i class="fas fa-map-marker-alt"></i> {{ route.route_name }}
+                                <span class="badge badge-primary ml-2">{{ route_buses|length }} buses</span>
+                            </h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Bus Number</th>
+                                            <th>Driver</th>
+                                            <th>Capacity</th>
+                                            <th>Status</th>
+                                            <th>Quick Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bus in route_buses|sort(attribute='start_time') %}
+                                        <tr>
+                                            <td><strong>{{ bus.bus_number }}</strong></td>
+                                            <td>{{ bus.driver_name }}</td>
+                                            <td>{{ bus.capacity }} seats</td>
+                                            <td>
+                                                <span class="badge badge-{{ 'success' if bus.status == 'active' else 'danger' }}">
+                                                    {{ bus.status.title() }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editBusModal" onclick="editBus({{ bus.bus_id }}, '{{ bus.bus_number }}', '{{ bus.driver_name }}', {{ bus.capacity }}, {{ bus.route_id if bus.route_id else 'null' }})">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-secondary" onclick="toggleBusStatus({{ bus.bus_id }}, '{{ bus.status }}')">
+                                                        <i class="fas fa-{{ 'ban' if bus.status == 'active' else 'check' }}"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Buses without routes -->
+                        {% set unassigned_buses = buses|selectattr('route_id', 'none')|list %}
+                        {% if unassigned_buses %}
+                        <div class="route-section">
+                            <h6 class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i> Unassigned Buses
+                                <span class="badge badge-warning ml-2">{{ unassigned_buses|length }} buses</span>
+                            </h6>
+                            <p class="text-muted small">These buses are not assigned to any route. Click Edit to assign them.</p>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Bus Number</th>
+                                            <th>Driver</th>
+                                            <th>Capacity</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bus in unassigned_buses %}
+                                        <tr>
+                                            <td><strong>{{ bus.bus_number }}</strong></td>
+                                            <td>{{ bus.driver_name }}</td>
+                                            <td>{{ bus.capacity }} seats</td>
+                                            <td>
+                                                <span class="badge badge-{{ 'success' if bus.status == 'active' else 'danger' }}">
+                                                    {{ bus.status.title() }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editBusModal" onclick="editBus({{ bus.bus_id }}, '{{ bus.bus_number }}', '{{ bus.driver_name }}', {{ bus.capacity }}, null)">
+                                                    <i class="fas fa-edit"></i> Assign Route
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bus Modal -->
+    <div class="modal fade" id="addBusModal" tabindex="-1" role="dialog" aria-labelledby="addBusModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBusModalLabel">Add New Bus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('add_bus') }}">
+                        <div class="form-group">
+                            <label>Bus Number</label>
+                            <input type="text" name="bus_number" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Driver Name</label>
+                            <input type="text" name="driver_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Capacity</label>
+                            <input type="number" name="capacity" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Route</label>
+                            <select name="route_id" class="form-control">
+                                <option value="">Select Route (Optional)</option>
+                                {% for route in routes %}
+                                <option value="{{ route.route_id }}">{{ route.route_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Bus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Bus Modal -->
+    <div class="modal fade" id="editBusModal" tabindex="-1" role="dialog" aria-labelledby="editBusModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editBusModalLabel">Edit Bus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="" id="editBusForm">
+                        <input type="hidden" name="bus_id" id="editBusId">
+                        <div class="form-group">
+                            <label>Bus Number</label>
+                            <input type="text" name="bus_number" id="editBusNumber" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Driver Name</label>
+                            <input type="text" name="driver_name" id="editDriverName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Capacity</label>
+                            <input type="number" name="capacity" id="editCapacity" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Route</label>
+                            <select name="route_id" id="editRouteId" class="form-control">
+                                <option value="">Select Route (Optional)</option>
+                                {% for route in routes %}
+                                <option value="{{ route.route_id }}">{{ route.route_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Bus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Search functionality
+        $(document).ready(function() {
+            $('#busSearch').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#busTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        // Edit bus function
+        function editBus(busId, busNumber, driverName, capacity, routeId) {
+            $('#editBusId').val(busId);
+            $('#editBusNumber').val(busNumber);
+            $('#editDriverName').val(driverName);
+            $('#editCapacity').val(capacity);
+            $('#editRouteId').val(routeId);
+            $('#editBusForm').attr('action', `/admin/bus/edit/${busId}`);
+        }
+
+        // Status toggle functions
+        function toggleBusStatus(busId, currentStatus) {
+            var newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            var action = newStatus === 'inactive' ? 'deactivate' : 'activate';
+
+            if (confirm(`Are you sure you want to ${action} this bus?`)) {
+                window.location.href = `/admin/toggle_bus_status/${busId}/${newStatus}`;
+            }
+        }
+
+        // Delete functions
+        function deleteBus(busId, busNumber) {
+            if (confirm(`Are you sure you want to permanently delete bus "${busNumber}"? This action cannot be undone.`)) {
+                window.location.href = `/admin/delete_bus/${busId}`;
+            }
+        }
+    </script>
+</body>
+</html>

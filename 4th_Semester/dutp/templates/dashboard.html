@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Dashboard • DUTP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#"><i class="fas fa-bus"></i> DUTP Student Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4 student-dashboard">
+        <!-- Live Clock -->
+        <div class="live-clock-container">
+            <i class="fas fa-clock mr-2"></i>
+            <span id="live-clock">Loading...</span>
+        </div>
+        
+        <!-- Welcome and Stats in One Row -->
+        <div class="welcome-stats-row">
+            <div class="welcome-section">
+                <h1>Welcome, {{ student.name }}!</h1>
+            </div>
+            <div class="stats-grid-compact">
+        <div class="stats-card-compact">
+          <i class="fas fa-ticket-alt"></i>
+          <div class="stat-content">
+      <div class="stat-number">{{ active_bookings_today if active_bookings_today is not none else (student.bookings|length) }}</div>
+      {% if active_bookings_today_list and active_bookings_today_list|length > 0 %}
+      {% set nb = active_bookings_today_list[0] %}
+      {% set nb_bus = nb.bus if nb.bus else (buses|selectattr('bus_id','equalto', nb.bus_id)|first) %}
+      {% set nb_route = nb.route if nb.route else (routes|selectattr('route_id','equalto', nb.route_id)|first) %}
+      <div class="stat-label muted-small">Next: {{ nb_route.route_name if nb_route else 'Route' }} • {{ nb.departure_time.strftime('%I:%M %p') }} • Seat {{ nb.seat_number }}{% if nb_bus and nb_bus.bus_number %} • {{ nb_bus.bus_number }}{% endif %}</div>
+      {% else %}
+      <div class="stat-label muted-small">No upcoming bookings for today</div>
+      {% endif %}
+            <div class="stat-label">Active Bookings</div>
+          </div>
+        </div>
+                <div class="stats-card-compact">
+                    <i class="fas fa-route"></i>
+                    <div class="stat-content">
+                        <div class="stat-number">{{ routes|length }}</div>
+                        <div class="stat-label">Available Routes</div>
+                    </div>
+                </div>
+                <div class="stats-card-compact">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-content">
+                        <div class="stat-number">{{ (student.semester_expiry - now).days if student.semester_expiry and student.semester_expiry > now else 0 }}</div>
+                        <div class="stat-label">Days Left</div>
+                    </div>
+                </div>
+                <div class="stats-card-compact">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="stat-content">
+                        <div class="stat-number">{{ 'Active' if student.status == 'active' else 'Blocked' }}</div>
+                        <div class="stat-label">Account Status</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="row mb-3">
+            <div class="col-12">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-card" data-href="{{ url_for('routes_page') }}">
+                <i class="fas fa-route"></i>
+                <h3>View Routes</h3>
+                <p>Explore all available routes and buses with real-time availability</p>
+            </div>
+            <div class="action-card" data-href="{{ url_for('routes_page') }}">
+                <i class="fas fa-plus-circle"></i>
+                <h3>Book a Seat</h3>
+                <p>Reserve your seat on available buses with real-time availability</p>
+            </div>
+            <div class="action-card" data-href="{{ url_for('my_bookings') }}">
+                <i class="fas fa-history"></i>
+                <h3>My Bookings</h3>
+                <p>View and manage all your current and past reservations</p>
+            </div>
+            <div class="action-card" data-href="{{ url_for('status') }}">
+                <i class="fas fa-id-card"></i>
+                <h3>Account Status</h3>
+                <p>Check your pass validity and account information</p>
+            </div>
+        </div>
+
+  <!-- Available Routes -->
+  <h2 class="section-title highlight-primary mb-4"><span class="section-icon"><i class="fas fa-route"></i></span>Available Routes</h2>
+        <div class="routes-grid">
+            {% for route in routes %}
+            <div class="route-card">
+                <div class="route-header">
+                    <h3 class="route-name">{{ route.route_name }}</h3>
+                    <span class="route-status available">Available</span>
+                </div>
+                <p><i class="fas fa-map-marker-alt"></i> {{ route.start_point }} → {{ route.end_point }}</p>
+                <p><i class="fas fa-clock"></i> Duration: {{ route.duration }} minutes</p>
+                <p><i class="fas fa-road"></i> Distance: {{ route.distance }} km</p>
+                
+                <!-- Next Available Bus -->
+                {% set route_buses = buses|selectattr('route_id', 'equalto', route.route_id)|list %}
+                {% if route_buses %}
+        <div class="next-bus-container mt-3" data-route-id="{{ route.route_id }}">
+          <h5><i class="fas fa-clock"></i> Next Departure:</h5>
+          <div class="next-bus-info">
+            {% if next_bus_by_route and route.route_id in next_bus_by_route %}
+              {% set nb = next_bus_by_route[route.route_id] %}
+                            {% set display_time = nb.display_time %}
+              <div class="next-bus-card server">
+                <div class="bus-header">
+                  <div class="bus-number-display">
+                    <i class="fas fa-bus"></i>
+                    <span>Next Bus</span>
+                  </div>
+                  <span class="badge badge-info"><i class="fas fa-info-circle"></i> Coming Soon</span>
+                </div>
+                <div class="bus-details">
+                  <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                      <div class="detail-label">Departure Time</div>
+                                            <div class="detail-value">{{ display_time }}</div>
+                    </div>
+                  </div>
+                  <div class="detail-item">
+                    <i class="fas fa-hourglass-half"></i>
+                    <div>
+                      <div class="detail-label">Time Remaining</div>
+                      <div class="detail-value countdown-text">{{ (nb.seconds_until // 3600) ~ 'h ' ~ ((nb.seconds_until % 3600) // 60) ~ 'm' if nb.seconds_until >= 3600 else ( (nb.seconds_until // 60) ~ 'm ' ~ (nb.seconds_until % 60) ~ 's' ) }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="next-bus-info-js">
+                <div class="bus-loading">
+                  <i class="fas fa-spinner fa-spin"></i> Calculating...
+                </div>
+              </div>
+              <div class="bus-data" style="display: none;">
+                {# Use route_times_map passed from server: guaranteed HH:MM strings. #}
+                {% set times = route_times_map.get(route.route_id, []) %}
+                {% for t in times %}
+                <span data-bus-time="{{ t }}" data-bus-number="" data-bus-id=""></span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+                {% endif %}
+                
+                <a href="{{ url_for('routes_page') }}" class="btn btn-primary">Book Now</a>
+            </div>
+            {% endfor %}
+            {% if not routes %}
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-route fa-3x text-muted mb-3"></i>
+                        <h5 class="card-title">No routes available</h5>
+                        <p class="card-text">Check back later for available routes.</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+    <!-- Important Notices -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="section-title highlight-accent"><span class="section-icon"><i class="fas fa-info-circle"></i></span>Important Notices</h2>
+      </div>
+    </div>
+
+        <div class="row">
+            <div class="col-12">
+                {% for notice in notices %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-info-circle text-primary"></i> {{ notice.title }}
+                        </h5>
+                        <p class="card-text">{{ notice.content }}</p>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar"></i> {{ notice.posted_date.strftime('%B %d, %Y') }}
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not notices %}
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5 class="card-title">No notices at this time</h5>
+                        <p class="card-text">Check back later for updates and announcements.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+    // ===== REAL-TIME NEXT BUS TRACKING =====
+    
+    function getCurrentDateTime() {
+      const now = new Date();
+      return now.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'Asia/Dhaka',
+        hour12: true
+      });
+    }
+
+    function createTodayDateFromTime(timeStr) {
+      const now = new Date();
+      const [h, m] = timeStr.split(':').map(Number);
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
+      return d;
+    }
+
+    function formatCountdown(targetDate) {
+      const now = new Date();
+      const diff = targetDate - now;
+      if (diff <= 0) return null;
+      
+      const totalSec = Math.floor(diff / 1000);
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      
+      if (h > 0) {
+        return `${h}h ${m}m ${s}s`;
+      } else if (m > 0) {
+        return `${m}m ${s}s`;
+      } else {
+        return `${s}s`;
+      }
+    }
+
+    function updateNextBus() {
+      const now = new Date();
+      
+      // Find all route containers
+      document.querySelectorAll('.next-bus-container').forEach(function(container) {
+        const busDataElements = container.querySelectorAll('.bus-data span');
+        const nextBusInfo = container.querySelector('.next-bus-info');
+        
+        if (!busDataElements.length) return;
+        
+        let nextBus = null;
+        let minDiff = Infinity;
+        
+        // Find the next available bus
+        busDataElements.forEach(function(busData) {
+          const busTime = busData.getAttribute('data-bus-time');
+          if (!busTime) return;
+          
+          const targetDate = createTodayDateFromTime(busTime);
+          const diff = targetDate - now;
+          
+          // If this bus hasn't departed yet and is sooner than current next
+          if (diff > 0 && diff < minDiff) {
+            minDiff = diff;
+            nextBus = {
+              number: busData.getAttribute('data-bus-number'),
+              time: busTime,
+              targetDate: targetDate,
+              diff: diff
+            };
+          }
+        });
+        
+        // Display the next bus
+        if (nextBus) {
+          const countdown = formatCountdown(nextBus.targetDate);
+          const [h, m] = nextBus.time.split(':');
+          const displayTime = new Date(2000, 0, 1, h, m).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+          });
+          
+          let badgeClass = 'success';
+          let statusText = 'On Time';
+          let urgencyIcon = 'fa-check-circle';
+          
+          if (nextBus.diff <= 5 * 60 * 1000) {
+            badgeClass = 'danger';
+            statusText = 'Boarding Now!';
+            urgencyIcon = 'fa-exclamation-circle';
+          } else if (nextBus.diff <= 15 * 60 * 1000) {
+            badgeClass = 'warning';
+            statusText = 'Arriving Soon';
+            urgencyIcon = 'fa-clock';
+          } else if (nextBus.diff <= 30 * 60 * 1000) {
+            badgeClass = 'info';
+            statusText = 'Coming Soon';
+            urgencyIcon = 'fa-info-circle';
+          }
+          
+          nextBusInfo.innerHTML = `
+            <div class="next-bus-card ${badgeClass}">
+              <div class="bus-header">
+                <div class="bus-number-display">
+                  <i class="fas fa-bus"></i>
+                  <span>Next Bus</span>
+                </div>
+                <span class="badge badge-${badgeClass}">
+                  <i class="fas ${urgencyIcon}"></i> ${statusText}
+                </span>
+              </div>
+              <div class="bus-details">
+                <div class="detail-item">
+                  <i class="fas fa-clock"></i>
+                  <div>
+                    <div class="detail-label">Departure Time</div>
+                    <div class="detail-value">${displayTime}</div>
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-hourglass-half"></i>
+                  <div>
+                    <div class="detail-label">Time Remaining</div>
+                    <div class="detail-value countdown-text">${countdown}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          // No more buses today
+          nextBusInfo.innerHTML = `
+            <div class="no-bus-card">
+              <i class="fas fa-moon fa-2x mb-2"></i>
+              <div class="no-bus-text">No more buses today</div>
+              <small class="text-muted">Check back tomorrow for schedules</small>
+            </div>
+          `;
+        }
+      });
+    }
+
+    // Update next bus every second
+    updateNextBus();
+    setInterval(updateNextBus, 1000);
+    
+    // Display current date/time
+    function updateClock() {
+      const clockDiv = document.getElementById('live-clock');
+      if (clockDiv) {
+        clockDiv.textContent = getCurrentDateTime();
+      }
+    }
+    
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    // Wire up quick action cards (use data-href to avoid inline JS quoting issues)
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.action-card[data-href]').forEach(function(el) {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', function() {
+          window.location.href = el.getAttribute('data-href');
+        });
+      });
+    });
+    </script>
+    
+    <style>
+    /* Next Bus Display Styles */
+    .next-bus-container {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 12px;
+    }
+    
+    .next-bus-container h5 {
+      margin-bottom: 1rem;
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .next-bus-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-left: 4px solid #28a745;
+    }
+    
+    .next-bus-card.warning {
+      border-left-color: #ffc107;
+      background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+    }
+    
+    .next-bus-card.danger {
+      border-left-color: #dc3545;
+      background: linear-gradient(135deg, #ffe6e6 0%, #ffffff 100%);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .next-bus-card.info {
+      border-left-color: #17a2b8;
+      background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+      }
+      50% {
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+      }
+    }
+    
+    .bus-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .bus-number-display {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .bus-number-display i {
+      color: #007bff;
+      font-size: 1.5rem;
+    }
+    
+    .bus-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .detail-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    
+    .detail-item i {
+      font-size: 1.25rem;
+      color: #007bff;
+      margin-top: 0.25rem;
+    }
+    
+    .detail-label {
+      font-size: 0.75rem;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.25rem;
+    }
+    
+    .detail-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .countdown-text {
+      color: #007bff;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .no-bus-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      color: #6c757d;
+    }
+    
+    .no-bus-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #495057;
+    }
+    
+    .bus-loading {
+      text-align: center;
+      padding: 1rem;
+      color: #6c757d;
+    }
+    
+    /* Live Clock Styles */
+    .live-clock-container {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    #live-clock {
+      font-size: 1.1rem;
+      font-weight: 500;
+      font-family: 'Courier New', monospace;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .bus-details {
+        grid-template-columns: 1fr;
+      }
+      
+      .next-bus-container {
+        padding: 0.75rem;
+      }
+    }
+    </style>
+</body>
+</html>

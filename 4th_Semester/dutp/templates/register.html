@@ -1,0 +1,102 @@
+{% extends "auth_base.html" %}
+{% block title %}Register • DUTP{% endblock %}
+
+{% block content %}
+<style>
+  .register-wrap{min-height:76vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;background:#f6f7fb}
+  .register-card{width:100%;max-width:900px;background:#fff;border-radius:12px;box-shadow:0 12px 30px rgba(16,24,40,0.06);padding:28px}
+  .form-group label{font-weight:700}
+  .muted-note{font-size:0.95rem;color:#556}
+  @media (max-width:900px){.register-card{padding:18px}}
+</style>
+
+<div class="register-wrap">
+  <div class="register-card">
+    <h2>Student Registration</h2>
+    <p class="muted-note">Fill in your details and submit. An administrator will review your request and approve you before you can book seats.</p>
+
+    <form method="POST" action="{{ url_for('register') }}">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Name</label>
+          <input type="text" name="name" class="form-control" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Email</label>
+          <input type="email" name="email" class="form-control" required placeholder="you@diu.edu.bd" pattern=".+@diu\.edu\.bd$" title="Please use your DIU email (must end with @diu.edu.bd)">
+          <small class="form-text text-muted">Registration is restricted to DIU email addresses (must end with @diu.edu.bd).</small>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Department</label>
+          <input type="text" name="department" class="form-control">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Student ID / Reg. No.</label>
+          <input type="text" name="student_number" class="form-control">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Preferred Route</label>
+          <select name="preferred_route" class="form-control">
+            <option value="">-- Select route (optional) --</option>
+            {% for r in routes %}
+            <option value="{{ r.route_id }}">{{ r.route_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Password</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Payment Receipt ID</label>
+          <input type="text" name="payment_receipt_id" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row mt-3">
+        <div class="col-md-12 text-right">
+          <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Back to Login</a>
+          <button type="submit" class="btn btn-primary">Submit Registration</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function(){
+    var form = document.querySelector('form[action="{{ url_for("register") }}"]');
+    if (!form) return;
+    form.addEventListener('submit', function(e){
+      var email = form.querySelector('input[name="email"]').value || '';
+      if (!email.toLowerCase().endsWith('@diu.edu.bd')){
+        e.preventDefault();
+        // show a temporary alert above the form
+        var alert = document.createElement('div');
+        alert.className = 'alert alert-danger';
+        alert.textContent = 'Registration requires a DIU email address (must end with @diu.edu.bd).';
+        var card = document.querySelector('.register-card');
+        if (card){
+          var existing = card.querySelector('.alert');
+          if (existing) existing.remove();
+          card.insertBefore(alert, card.firstChild);
+          setTimeout(function(){ alert.remove(); }, 5000);
+        } else {
+          alert(alert.textContent);
+        }
+        return false;
+      }
+      return true;
+    });
+  })();
+</script>
+{% endblock %}

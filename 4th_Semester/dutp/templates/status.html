@@ -1,0 +1,533 @@
+{% extends "base.html" %}
+{% block title %}Account Status • DUTP{% endblock %}
+{% block student_content %}
+<style>
+    :root {
+        --primary-blue: #2563eb;
+        --secondary-blue: #1d4ed8;
+        --accent-blue: #3b82f6;
+        --light-blue: #eff6ff;
+        --success-green: #10b981;
+        --warning-yellow: #f59e0b;
+        --error-red: #ef4444;
+        --text-dark: #1f2937;
+        --text-light: #6b7280;
+        --bg-white: #ffffff;
+        --bg-gray: #f8fafc;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --border-radius: 12px;
+        --transition: all 0.2s ease-in-out;
+    }
+
+    body {
+        background: linear-gradient(135deg, var(--bg-gray) 0%, var(--light-blue) 100%);
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .status-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .status-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .status-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .status-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-light);
+        font-weight: 400;
+    }
+
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .status-card {
+        background: var(--bg-white);
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid #e5e7eb;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .status-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+    }
+
+    .status-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .card-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+
+    .icon-approved {
+        background: linear-gradient(135deg, var(--success-green), #34d399);
+    }
+
+    .icon-pending {
+        background: linear-gradient(135deg, var(--warning-yellow), #fbbf24);
+    }
+
+    .icon-expired {
+        background: linear-gradient(135deg, var(--error-red), #f87171);
+    }
+
+    .icon-details {
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    .status-approved {
+        background-color: #dcfce7;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+    }
+
+    .status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+    }
+
+    .status-expired {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+
+    .status-active {
+        background-color: #dbeafe;
+        color: #1e40af;
+        border: 1px solid #bfdbfe;
+    }
+
+    .status-blocked {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+
+    .info-grid {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        background-color: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid #f3f4f6;
+    }
+
+    .info-label {
+        font-weight: 500;
+        color: var(--text-light);
+        font-size: 0.875rem;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: var(--text-dark);
+        text-align: right;
+    }
+
+    .metric-highlight {
+        font-size: 1.5rem;
+        color: var(--primary-blue);
+        font-weight: 700;
+    }
+
+    .action-section {
+        background: var(--bg-white);
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid #e5e7eb;
+        text-align: center;
+    }
+
+    .action-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--primary-blue);
+        border: 2px solid var(--primary-blue);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+        background: var(--primary-blue);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--bg-white);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid #e5e7eb;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--text-light);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 768px) {
+        .status-container {
+            padding: 1rem;
+        }
+
+        .status-title {
+            font-size: 2rem;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .status-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .status-card {
+            padding: 1.5rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .quick-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .quick-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+        }
+
+        .info-value {
+            text-align: left;
+        }
+    }
+</style>
+
+<div class="status-container">
+    <div class="status-header">
+        <h1 class="status-title">
+            <i class="fas fa-id-card"></i>
+            Account Status
+        </h1>
+        <p class="status-subtitle">Monitor your transport pass and account details</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+        <div class="stat-card">
+            <div class="stat-value">{{ (student.semester_expiry - now).days if student.semester_expiry and student.semester_expiry > now else 0 }}</div>
+            <div class="stat-label">Days Remaining</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_bookings }}</div>
+            <div class="stat-label">Active Bookings</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ student.registration_date.strftime('%m') }}</div>
+            <div class="stat-label">Registration Month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ '✓' if student.is_approved else '⏳' }}</div>
+            <div class="stat-label">Approval Status</div>
+        </div>
+    </div>
+
+    <!-- Main Status Cards -->
+    <div class="status-grid">
+        <!-- Approval Status -->
+        <div class="status-card">
+            <div class="card-icon icon-{{ 'approved' if student.is_approved else 'pending' }}">
+                <i class="fas fa-{{ 'check-circle' if student.is_approved else 'clock' }}"></i>
+            </div>
+            <h3 class="card-title">
+                <i class="fas fa-user-check"></i>
+                Account Approval
+            </h3>
+            {% if student.is_approved %}
+            <div class="status-indicator status-approved">
+                <i class="fas fa-check-circle"></i>
+                Approved & Active
+            </div>
+            {% else %}
+            <div class="status-indicator status-pending">
+                <i class="fas fa-clock"></i>
+                Pending Admin Review
+            </div>
+            {% endif %}
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Registration Date</span>
+                    <span class="info-value">{{ student.registration_date.strftime('%B %d, %Y') }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Account Status</span>
+                    <span class="info-value status-indicator status-{{ 'active' if student.status == 'active' else 'blocked' }}">
+                        {{ 'Active' if student.status == 'active' else 'Blocked' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Semester Validity -->
+        <div class="status-card">
+            <div class="card-icon icon-{{ 'approved' if semester_valid else 'expired' }}">
+                <i class="fas fa-{{ 'calendar-check' if semester_valid else 'calendar-times' }}"></i>
+            </div>
+            <h3 class="card-title">
+                <i class="fas fa-calendar-alt"></i>
+                Semester Pass
+            </h3>
+            {% if semester_valid %}
+            <div class="status-indicator status-approved">
+                <i class="fas fa-check-circle"></i>
+                Valid Pass
+            </div>
+            {% else %}
+            <div class="status-indicator status-expired">
+                <i class="fas fa-exclamation-triangle"></i>
+                Pass Expired
+            </div>
+            {% endif %}
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Days Remaining</span>
+                    <span class="info-value metric-highlight">{{ (student.semester_expiry - now).days if student.semester_expiry and student.semester_expiry > now else 0 }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Expiry Date</span>
+                    <span class="info-value">{{ student.semester_expiry.strftime('%B %d, %Y') if student.semester_expiry else 'Not Set' }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Valid Until</span>
+                    <span class="info-value">{{ student.semester_expiry.strftime('%A, %B %d, %Y') if student.semester_expiry else 'Not Approved' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Information -->
+        <div class="status-card">
+            <div class="card-icon icon-details">
+                <i class="fas fa-user"></i>
+            </div>
+            <h3 class="card-title">
+                <i class="fas fa-address-card"></i>
+                Student Information
+            </h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Full Name</span>
+                    <span class="info-value">{{ student.name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email Address</span>
+                    <span class="info-value">{{ student.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Student ID</span>
+                    <span class="info-value">#{{ student.student_id }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Member Since</span>
+                    <span class="info-value">{{ student.registration_date.strftime('%B %Y') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transport Usage -->
+        <div class="status-card">
+            <div class="card-icon icon-approved">
+                <i class="fas fa-bus"></i>
+            </div>
+            <h3 class="card-title">
+                <i class="fas fa-chart-bar"></i>
+                Transport Usage
+            </h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Total Bookings</span>
+                    <span class="info-value metric-highlight">{{ total_bookings }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">This Month</span>
+                    <span class="info-value">{{ this_month_bookings }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">This Week</span>
+                    <span class="info-value">{{ this_week_bookings }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Account Status</span>
+                    <span class="info-value status-indicator status-{{ 'approved' if student.is_approved and semester_valid else 'pending' }}">
+                        {{ 'Ready to Book' if student.is_approved and semester_valid else 'Contact Admin' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-section">
+        <h3 class="action-title">Quick Actions</h3>
+        <div class="action-buttons">
+            <a href="{{ url_for('dashboard') }}" class="btn-primary">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            <a href="{{ url_for('routes_page') }}" class="btn-primary">
+                <i class="fas fa-route"></i>
+                Book Routes
+            </a>
+            <a href="{{ url_for('my_bookings') }}" class="btn-secondary">
+                <i class="fas fa-ticket-alt"></i>
+                My Bookings
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

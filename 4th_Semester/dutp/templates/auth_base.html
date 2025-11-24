@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}DUTP{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Minimal auth base styling to keep auth pages lightweight */
+        body { background: #f6f7fb; font-family: 'Segoe UI', Tahoma, sans-serif; color:#1f2937; margin:0; }
+        .auth-container-outer { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    </style>
+</head>
+<body>
+    {% if self.header_override() %}
+        {% block header_override %}{% endblock %}
+    {% endif %}
+
+    <main class="auth-container-outer">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer style="text-align:center;padding:18px 12px;color:#6b7280;font-size:0.9rem;">
+        &copy; 2025 Daffodil International University. All Rights Reserved | Developed by <a href="https://example.com" target="_blank" rel="noopener noreferrer">Aifee Aadil</a>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Welcome • DUTP{% endblock %}
+{% block content %}
+<div class="welcome-landing">
+    <div class="landing-content">
+        <div class="landing-icon">
+            <i class="fas fa-bus"></i>
+        </div>
+        <h1>
+            <span class="brand-highlight">🌼 DUTP</span>
+        </h1>
+        <h2>Daffodil University Transport Portal</h2>
+        <p class="landing-description">
+            <i class="fas fa-route"></i> Your gateway to convenient and reliable university transportation services
+        </p>
+        <div class="landing-actions">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Login to Your Account
+            </a>
+            <p class="landing-note">
+                New student? <a href="{{ url_for('login') }}">Register here</a>
+            </p>
+        </div>
+    </div>
+    <div class="landing-visual">
+        <div class="features-showcase">
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h4>Real-time Tracking</h4>
+                <p>Monitor your bus location and schedule in real-time</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h4>Secure Booking</h4>
+                <p>Safe and secure seat reservation system</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h4>Easy Access</h4>
+                <p>Access transportation services anytime, anywhere</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-users"></i>
+                <h4>Community</h4>
+                <p>Join thousands of students using our services</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

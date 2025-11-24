@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Management • DUTP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <span class="navbar-text ml-auto">Student Management • Welcome, {{ name }}</span>
+    </nav>
+
+                                        
+
+        <!-- Pending Approvals Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    {% if pending %}
+                            <table class="table table-striped" id="pendingTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Department</th>
+                                        <th>Preferred Route</th>
+                                        <th>Receipt ID</th>
+                                        <th>Registered</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in pending %}
+                                    <tr>
+                                        <td>{{ student.name }}</td>
+                                        <td>{{ student.email }}</td>
+                                        <td>{{ student.department or '-' }}</td>
+                                        <td>
+                                            {% set pref = routes|selectattr('route_id','equalto', student.preferred_route_id)|first %}
+                                            {{ pref.route_name if pref else '-' }}
+                                        </td>
+                                        <td>{{ student.payment_receipt_id or '-' }}</td>
+                                        <td>{{ student.registration_date.strftime('%B %d, %Y') }}</td>
+                                        <td>
+                                            <a href="{{ url_for('approve', student_id=student.student_id) }}" class="btn btn-success btn-sm">Approve</a>
+                                            <a href="{{ url_for('reject', student_id=student.student_id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Reject this student?')">Reject</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="text-center">
+                            <i class="fas fa-check-circle fa-3x text-success"></i>
+                            <h3>All Caught Up!</h3>
+                            <p>No pending student approvals.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Students Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="fas fa-users"></i> All Students</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" id="studentSearch" class="form-control" placeholder="Search students by name or email...">
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button class="btn btn-success" data-toggle="modal" data-target="#addStudentModal">
+                                    <i class="fas fa-plus"></i> Add New Student
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="studentTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Student No.</th>
+                                        <th>Department</th>
+                                        <th>Preferred Route</th>
+                                        <th>Receipt ID</th>
+                                        <th>Status</th>
+                                        <th>Registered</th>
+                                        <th>Total Booked</th>
+                                        <th>Approval Expires</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in all_students %}
+                                    <tr>
+                                        <td>{{ student.student_id }}</td>
+                                        <td>{{ student.name }}</td>
+                                        <td>{{ student.email }}</td>
+                                        <td>{{ student.student_number or '-' }}</td>
+                                        <td>{{ student.department or '-' }}</td>
+                                        <td>
+                                            {% set pref = routes | selectattr('route_id','equalto', student.preferred_route_id) | list | first %}
+                                            {{ pref.route_name if pref else '-' }}
+                                        </td>
+                                        <td>{{ student.payment_receipt_id or '-' }}</td>
+                                        <td>
+                                            <span class="badge badge-{{ 'success' if student.status == 'active' else 'danger' }}">
+                                                {{ student.status.title() }}
+                                            </span>
+                                        </td>
+                                        <td>{{ student.registration_date.strftime('%B %d, %Y') }}</td>
+                                        <td>{{ bookings_count_by_student.get(student.student_id, 0) }}</td>
+                                        <td>
+                                            {% if student.semester_expiry %}
+                                                <span class="{% if student.semester_expiry < current_date %}text-danger{% elif (student.semester_expiry - current_date).days <= 30 %}text-warning{% else %}text-success{% endif %}">
+                                                    {{ student.semester_expiry.strftime('%B %d, %Y') }}
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted">Not set</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                {% if student.semester_expiry and student.semester_expiry < current_date %}
+                                                <a href="{{ url_for('renew_student', student_id=student.student_id) }}" class="btn btn-warning btn-sm" title="Renew Approval">
+                                                    <i class="fas fa-redo"></i> Renew
+                                                </a>
+                                                {% endif %}
+                                                <!-- Approved students: only suspend/unblock and delete -->
+                                                <button class="btn btn-outline-secondary toggle-status-btn" data-student-id="{{ student.student_id }}" data-student-status="{{ student.status }}" title="Toggle Status">
+                                                    <i class="fas fa-{{ 'ban' if student.status == 'active' else 'check' }}"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger delete-student-btn" data-student-id="{{ student.student_id }}" data-student-name="{{ student.name }}" title="Delete Student">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStudentModalLabel">Add New Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('add_student') }}">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Student</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Search functionality
+        $(document).ready(function() {
+            // Student search
+            $('#studentSearch').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#studentTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            // Pending student search
+            $('#pendingSearch').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#pendingTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+        // Status toggle functions (keep callable directly, and also wire up data-attribute buttons)
+        function toggleStudentStatus(studentId, currentStatus) {
+            var newStatus = currentStatus === 'active' ? 'blocked' : 'active';
+            var action = newStatus === 'blocked' ? 'block' : 'unblock';
+
+            if (confirm(`Are you sure you want to ${action} this student?`)) {
+                window.location.href = `/admin/toggle_student_status/${studentId}/${newStatus}`;
+            }
+        }
+
+        // Delete functions
+        function deleteStudent(studentId, studentName) {
+            if (confirm(`Are you sure you want to permanently delete student "${studentName}"? This action cannot be undone.`)) {
+                window.location.href = `/admin/delete_student/${studentId}`;
+            }
+        }
+
+        // Wire up data-attribute buttons (avoid inline onclick quoting issues)
+        document.querySelectorAll('.toggle-status-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var sid = btn.getAttribute('data-student-id');
+                var sstat = btn.getAttribute('data-student-status');
+                toggleStudentStatus(sid, sstat);
+            });
+        });
+
+        document.querySelectorAll('.delete-student-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var sid = btn.getAttribute('data-student-id');
+                var sname = btn.getAttribute('data-student-name');
+                deleteStudent(sid, sname);
+            });
+        });
+    </script>
+</body>
+</html>

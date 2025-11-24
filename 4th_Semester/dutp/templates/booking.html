@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Seat • DUTP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border-radius: 16px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .header h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .booking-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-title {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            background: var(--primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+        }
+        
+        .bus-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .bus-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .bus-option.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .bus-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .bus-number {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+        
+        .available-seats {
+            background: var(--success);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            background: #adb5bd;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .booking-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .route-name {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+        
+        .booking-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .btn-cancel {
+            background: #ff6b6b;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-cancel:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        
+        .no-bookings {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+        }
+        
+        .no-bookings i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #e9ecef;
+        }
+        
+        .bus-section {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .processing {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .route-select {
+            position: relative;
+        }
+        
+        .route-select::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .booking-card {
+                margin-bottom: 30px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-bus me-2"></i>Book Your Seat</h1>
+            <p class="text-muted">Reserve your seat on DUTP buses with ease</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="booking-card">
+                    <h3 class="section-title"><i class="fas fa-plus"></i> New Booking</h3>
+                    <form id="bookForm">
+                        <div class="mb-4">
+                            <label for="route_id" class="form-label fw-bold">Select Route</label>
+                            <div class="route-select">
+                                <select name="route_id" id="route_id" class="form-select" required>
+                                    <option value="">Choose your route</option>
+                                    <!-- Routes will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Direction</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="direction" id="to_campus" value="to_campus" checked>
+                                        <label class="form-check-label" for="to_campus">
+                                            <i class="fas fa-arrow-right me-2"></i>To Campus
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="direction" id="from_campus" value="from_campus">
+                                        <label class="form-check-label" for="from_campus">
+                                            <i class="fas fa-arrow-left me-2"></i>From Campus
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="departure_time" class="form-label fw-bold">Departure Time</label>
+                            <div class="route-select">
+                                <select name="departure_time" id="departure_time" class="form-select" required>
+                                    <option value="">Select departure time</option>
+                                    <!-- Times will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="booking-card">
+                    <h3 class="section-title"><i class="fas fa-ticket-alt"></i> Your Bookings</h3>
+                    <div id="bookingsContainer">
+                        <!-- Bookings will be populated here -->
+                        <div class="no-bookings">
+                            <i class="fas fa-ticket-alt"></i>
+                            <h5>No bookings yet</h5>
+                            <p>Select a route and book your first seat!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database integration - load data from Flask backend
+        let routes = [];
+        let buses = [];
+        let bookings = [];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Load routes from database
+                await loadRoutes();
+                // Load user's bookings
+                await loadBookings();
+                
+                // Set up event listeners
+                document.getElementById('route_id').addEventListener('change', handleRouteChange);
+                document.getElementById('bookForm').addEventListener('submit', handleBookingSubmit);
+            } catch (error) {
+                console.error('Initialization error:', error);
+                alert('Failed to load data. Please refresh the page.');
+            }
+        });
+
+        async function loadRoutes() {
+            try {
+                const response = await fetch('/api/routes', {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    routes = await response.json();
+                    populateRoutesDropdown();
+                } else {
+                    console.error('Failed to load routes');
+                }
+            } catch (error) {
+                console.error('Error loading routes:', error);
+            }
+        }
+
+        async function loadBookings() {
+            try {
+                const response = await fetch('/api/bookings', {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    bookings = await response.json();
+                    renderBookings();
+                } else {
+                    console.error('Failed to load bookings');
+                }
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        function populateRoutesDropdown() {
+            const routeSelect = document.getElementById('route_id');
+            routes.forEach(route => {
+                const option = document.createElement('option');
+                option.value = route.route_id;
+                option.textContent = route.route_name;
+                routeSelect.appendChild(option);
+            });
+        }
+
+        async function handleRouteChange() {
+            const routeId = parseInt(this.value);
+            const submitBtn = document.getElementById('submitBtn');
+            const timeSelect = document.getElementById('departure_time');
+            
+            if (!routeId) {
+                submitBtn.disabled = true;
+                timeSelect.innerHTML = '<option value="">Select departure time</option>';
+                return;
+            }
+            
+            // Load available times for this route
+            try {
+                const response = await fetch(`/api/times/${routeId}`, {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    timeSelect.innerHTML = '<option value="">Select departure time</option>';
+                    
+                    data.times.forEach(time => {
+                        const option = document.createElement('option');
+                        option.value = time;
+                        option.textContent = time;
+                        timeSelect.appendChild(option);
+                    });
+                    
+                    // Enable submit button if we have times
+                    submitBtn.disabled = data.times.length === 0;
+                } else {
+                    console.error('Failed to load times');
+                    submitBtn.disabled = true;
+                }
+            } catch (error) {
+                console.error('Error loading times:', error);
+                submitBtn.disabled = true;
+            }
+        }
+        
+        async function handleBookingSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            
+            // Show processing state
+            submitBtn.disabled = true;
+            btnText.innerHTML = '<span class="processing"><span class="spinner"></span> Processing...</span>';
+            
+            try {
+                const formData = new FormData(e.target);
+                const response = await fetch('/book', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert(`Booking successful!\nSeat booked on your selected route.`);
+                    // Reload bookings
+                    await loadBookings();
+                    // Reset form
+                    document.getElementById('bookForm').reset();
+                    submitBtn.disabled = true;
+                    btnText.textContent = 'Book Seat';
+                } else {
+                    alert('Error: ' + (result.error || 'Booking failed'));
+                    submitBtn.disabled = false;
+                    btnText.textContent = 'Book Seat';
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                alert('Network error. Please try again.');
+                submitBtn.disabled = false;
+                btnText.textContent = 'Book Seat';
+            }
+        }
+        
+        async function deleteBooking(bookingId) {
+            if (!confirm('Are you sure you want to cancel this booking?')) return;
+            
+            try {
+                const response = await fetch(`/delete_booking/${bookingId}`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('Booking cancelled successfully!');
+                    // Reload bookings
+                    await loadBookings();
+                } else {
+                    alert('Error: ' + (result.error || 'Failed to cancel'));
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Network error. Please try again.');
+            }
+        }
+        
+        function renderBookings() {
+            const container = document.getElementById('bookingsContainer');
+            
+            if (bookings.length === 0) {
+                container.innerHTML = `
+                    <div class="no-bookings">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h5>No bookings yet</h5>
+                        <p>Select a route and book your first seat!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            bookings.forEach(booking => {
+                const bookingEl = document.createElement('div');
+                bookingEl.className = 'booking-item';
+                bookingEl.innerHTML = `
+                    <div class="booking-header">
+                        <div class="route-name">${booking.route.route_name}</div>
+                        <button class="btn-cancel" onclick="deleteBooking(${booking.booking_id})">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                    <div class="booking-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Bus Number</span>
+                            <span class="detail-value">${booking.bus.bus_number}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seat Number</span>
+                            <span class="detail-value">${booking.seat_number}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Direction</span>
+                            <span class="detail-value">${booking.direction === 'to_campus' ? 'To Campus' : 'From Campus'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Departure Time</span>
+                            <span class="detail-value">${booking.departure_time}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Booking Date</span>
+                            <span class="detail-value">${new Date(booking.booking_date).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(bookingEl);
+            });
+        }
+    </script>
+</body>
+</html>

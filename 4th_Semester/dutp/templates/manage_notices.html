@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Notice Management • DUTP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <span class="navbar-text ml-auto">Notice Management • Welcome, {{ name }}</span>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Notice Management</h1>
+            </div>
+        </div>
+
+        <!-- All Notices Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="fas fa-bullhorn"></i> All Notices</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" id="noticeSearch" class="form-control" placeholder="Search notices by title or content...">
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button class="btn btn-success" data-toggle="modal" data-target="#addNoticeModal">
+                                    <i class="fas fa-plus"></i> Add New Notice
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="noticeTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Content</th>
+                                        <th>Posted Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for notice in notices %}
+                                    <tr>
+                                        <td>{{ notice.notice_id }}</td>
+                                        <td>{{ notice.title }}</td>
+                                        <td>
+                                            <span title="{{ notice.content }}">{{ notice.content[:50] }}{% if notice.content|length > 50 %}...{% endif %}</span>
+                                        </td>
+                                        <td>{{ notice.posted_date.strftime('%B %d, %Y') }}</td>
+                                        <td>
+                                            <span class="badge badge-{{ 'success' if notice.status == 'active' else 'danger' }}">
+                                                {{ notice.status.title() }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#editNoticeModal" onclick="editNotice({{ notice.notice_id }}, '{{ notice.title.replace("'", "\\'") }}', '{{ notice.content.replace("'", "\\'") }}')" title="Edit Notice">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary" onclick="toggleNoticeStatus({{ notice.notice_id }}, '{{ notice.status }}')" title="Toggle Status">
+                                                    <i class="fas fa-{{ 'ban' if notice.status == 'active' else 'check' }}"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger" onclick="deleteNotice({{ notice.notice_id }}, '{{ notice.title.replace("'", "\\'") }}')" title="Delete Notice">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Notice Modal -->
+    <div class="modal fade" id="addNoticeModal" tabindex="-1" role="dialog" aria-labelledby="addNoticeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNoticeModalLabel">Add New Notice</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('add_notice') }}">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea name="content" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Notice</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Notice Modal -->
+    <div class="modal fade" id="editNoticeModal" tabindex="-1" role="dialog" aria-labelledby="editNoticeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editNoticeModalLabel">Edit Notice</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="" id="editNoticeForm">
+                        <input type="hidden" name="notice_id" id="editNoticeId">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" id="editNoticeTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea name="content" id="editNoticeContent" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Notice</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Search functionality
+        $(document).ready(function() {
+            $('#noticeSearch').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#noticeTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        // Edit notice function
+        function editNotice(noticeId, title, content) {
+            $('#editNoticeId').val(noticeId);
+            $('#editNoticeTitle').val(title);
+            $('#editNoticeContent').val(content);
+            $('#editNoticeForm').attr('action', `/admin/notice/edit/${noticeId}`);
+        }
+
+        // Status toggle functions
+        function toggleNoticeStatus(noticeId, currentStatus) {
+            var newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            var action = newStatus === 'inactive' ? 'deactivate' : 'activate';
+
+            if (confirm(`Are you sure you want to ${action} this notice?`)) {
+                window.location.href = `/admin/toggle_notice_status/${noticeId}/${newStatus}`;
+            }
+        }
+
+        // Delete functions
+        function deleteNotice(noticeId, noticeTitle) {
+            if (confirm(`Are you sure you want to permanently delete notice "${noticeTitle}"? This action cannot be undone.`)) {
+                window.location.href = `/admin/delete_notice/${noticeId}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Route Management • DUTP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <span class="navbar-text ml-auto">Route Management • Welcome, {{ name }}</span>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Route Management</h1>
+            </div>
+        </div>
+
+        <!-- All Routes Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="fas fa-route"></i> All Routes</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" id="routeSearch" class="form-control" placeholder="Search routes by name, start, or end point...">
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button class="btn btn-success" data-toggle="modal" data-target="#addRouteModal">
+                                    <i class="fas fa-plus"></i> Add New Route
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="routeTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Route Name</th>
+                                        <th>Start Point</th>
+                                        <th>End Point</th>
+                                        <th>Distance (km)</th>
+                                        <th>Duration (min)</th>
+                                        <th>Departure Times</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for route in routes %}
+                                    <tr>
+                                        <td>{{ route.route_id }}</td>
+                                        <td>{{ route.route_name }}</td>
+                                        <td>{{ route.start_point }}</td>
+                                        <td>{{ route.end_point }}</td>
+                                        <td>{{ route.distance }}</td>
+                                        <td>{{ route.duration }}</td>
+                                        <td>
+                                            {% set times = route.get_departure_times() %}
+                                            {% if times %}
+                                                {% for time in times %}
+                                                    <span class="badge badge-info">{{ time.strftime('%I:%M %p') }}</span>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span class="badge badge-warning">No times set</span>
+                                                <small class="text-muted d-block">Click "Manage Times" to add departure times</small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-{{ 'success' if route.status == 'active' else 'danger' }}">
+                                                {{ route.status.title() }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#editRouteModal" onclick="editRoute({{ route.route_id }}, '{{ route.route_name }}', '{{ route.start_point }}', '{{ route.end_point }}', {{ route.distance }}, {{ route.duration }})" title="Edit Route">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline-info" data-toggle="modal" data-target="#manageTimesModal" onclick="manageTimes({{ route.route_id }}, '{{ route.route_name }}')" title="Manage Times">
+                                                    <i class="fas fa-clock"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary" onclick="toggleRouteStatus({{ route.route_id }}, '{{ route.status }}')" title="Toggle Status">
+                                                    <i class="fas fa-{{ 'ban' if route.status == 'active' else 'check' }}"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger" onclick="deleteRoute({{ route.route_id }}, '{{ route.route_name }}')" title="Delete Route">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Route Modal -->
+    <div class="modal fade" id="addRouteModal" tabindex="-1" role="dialog" aria-labelledby="addRouteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRouteModalLabel">Add New Route</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('add_route') }}">
+                        <div class="form-group">
+                            <label>Route Name</label>
+                            <input type="text" name="route_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Start Point</label>
+                            <input type="text" name="start_point" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>End Point</label>
+                            <input type="text" name="end_point" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Distance (km)</label>
+                            <input type="number" name="distance" class="form-control" required min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" name="duration" class="form-control" required min="1">
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Route</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Route Modal -->
+    <div class="modal fade" id="editRouteModal" tabindex="-1" role="dialog" aria-labelledby="editRouteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRouteModalLabel">Edit Route</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="" id="editRouteForm">
+                        <input type="hidden" name="route_id" id="editRouteId">
+                        <div class="form-group">
+                            <label>Route Name</label>
+                            <input type="text" name="route_name" id="editRouteName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Start Point</label>
+                            <input type="text" name="start_point" id="editStartPoint" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>End Point</label>
+                            <input type="text" name="end_point" id="editEndPoint" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Distance (km)</label>
+                            <input type="number" name="distance" id="editDistance" class="form-control" required min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" name="duration" id="editDuration" class="form-control" required min="1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Route</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Times Modal -->
+    <div class="modal fade" id="manageTimesModal" tabindex="-1" role="dialog" aria-labelledby="manageTimesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="manageTimesModalLabel">Manage Departure Times</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="currentTimes" class="mb-3">
+                        <h6>Current Departure Times:</h6>
+                        <div id="timesList" class="d-flex flex-wrap gap-2"></div>
+                    </div>
+                    <form method="POST" action="" id="manageTimesForm">
+                        <input type="hidden" name="route_id" id="manageTimesRouteId">
+                        <div class="form-group">
+                            <label>Add New Departure Time</label>
+                            <input type="time" name="new_time" class="form-control" placeholder="e.g., 07:00">
+                            <small class="form-text text-muted">Add a new departure time for this route</small>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Time</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Search functionality
+        $(document).ready(function() {
+            $('#routeSearch').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#routeTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        // Edit route function
+        function editRoute(routeId, routeName, startPoint, endPoint, distance, duration) {
+            $('#editRouteId').val(routeId);
+            $('#editRouteName').val(routeName);
+            $('#editStartPoint').val(startPoint);
+            $('#editEndPoint').val(endPoint);
+            $('#editDistance').val(distance);
+            $('#editDuration').val(duration);
+            $('#editRouteForm').attr('action', `/admin/route/edit/${routeId}`);
+        }
+
+        // Manage times function
+        function manageTimes(routeId, routeName) {
+            $('#manageTimesRouteId').val(routeId);
+            $('#manageTimesModalLabel').text(`Manage Departure Times - ${routeName}`);
+            $('#manageTimesForm').attr('action', `/admin/route/times/add/${routeId}`);
+            
+            // Load current times
+            $.get(`/admin/route/times/${routeId}`, function(data) {
+                $('#timesList').empty();
+                if (data.times && data.times.length > 0) {
+                    data.times.forEach(function(time) {
+                        $('#timesList').append(`
+                            <span class="badge badge-info p-2">
+                                ${time} 
+                                <button type="button" class="btn btn-sm btn-danger ml-1" onclick="deleteTime(${routeId}, '${time}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </span>
+                        `);
+                    });
+                } else {
+                    $('#timesList').html('<span class="text-muted">No departure times set</span>');
+                }
+            });
+        }
+
+        // Delete time function
+        function deleteTime(routeId, time) {
+            if (confirm(`Remove departure time ${time}?`)) {
+                $.post(`/admin/route/times/delete/${routeId}`, { time: time }, function() {
+                    manageTimes(routeId, ''); // Refresh the modal
+                });
+            }
+        }
+
+        // Status toggle functions
+        function toggleRouteStatus(routeId, currentStatus) {
+            var newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            var action = newStatus === 'inactive' ? 'deactivate' : 'activate';
+
+            if (confirm(`Are you sure you want to ${action} this route?`)) {
+                window.location.href = `/admin/toggle_route_status/${routeId}/${newStatus}`;
+            }
+        }
+
+        // Delete functions
+        function deleteRoute(routeId, routeName) {
+            if (confirm(`Are you sure you want to permanently delete route "${routeName}"? This action cannot be undone.`)) {
+                window.location.href = `/admin/delete_route/${routeId}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{% extends "auth_base.html" %}
+{% block title %}Login • DUTP{% endblock %}
+
+{% block header_override %}
+<header style="background: linear-gradient(90deg, rgba(162,89,255,0.06), rgba(42,91,111,0.02)); border-bottom: 1px solid rgba(0,0,0,0.04);">
+  <div style="max-width:1100px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px;">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/Daffodil_International_University_Monogram.svg/140px-Daffodil_International_University_Monogram.svg.png" alt="Daffodil Logo" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">
+    <div style="font-weight:700;color:#2a5b6f;font-size:1.1rem;">Daffodil University Transport Portal</div>
+  </div>
+</header>
+{% endblock %}
+
+{% block content %}
+
+<style>
+  :root{--du-blue:#2a5b6f;--du-accent:#A259FF;--du-gold:#d7c9aa;--bg:#f6f7fb}
+  .login-wrap{min-height:76vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;background:var(--bg)}
+  .login-card{width:100%;max-width:980px;background:linear-gradient(180deg,#fff 0%,#fbfbff 100%);border-radius:14px;box-shadow:0 12px 40px rgba(16,24,40,0.08);display:flex;overflow:hidden}
+  .login-left{flex:1;padding:46px 44px;background:linear-gradient(135deg,rgba(162,89,255,0.06),rgba(42,91,111,0.02));display:flex;flex-direction:column;justify-content:center;gap:18px}
+  .login-left h2{margin:0;color:var(--du-blue);font-size:1.6rem}
+  .login-left p{margin:0;color:#526077}
+  .left-features{display:flex;gap:12px;margin-top:8px}
+  .feat{display:flex;align-items:center;gap:10px;color:#475569}
+  .feat i{font-size:20px;color:var(--du-accent);background:rgba(162,89,255,0.08);padding:8px;border-radius:8px}
+  .login-right{width:420px;padding:34px 28px;display:flex;flex-direction:column;gap:16px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand img{width:56px;height:56px;border-radius:10px}
+  .brand h3{margin:0;color:var(--du-blue)}
+  .role-toggle{display:flex;gap:8px;margin-top:6px}
+  .role-button{flex:1;padding:10px;border-radius:10px;border:1px solid #eef2ff;background:white;cursor:pointer;font-weight:600;color:#5b6b7a}
+  .role-button.active{background:linear-gradient(90deg,var(--du-accent),#6b8eff);color:white;border:none}
+  .form-group{margin-top:8px}
+  label{display:block;font-weight:700;color:#263447;margin-bottom:6px}
+  input[type=text],input[type=password],input[type=email]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #e6eef8}
+  .btn-primary{width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--du-accent),#6b8eff);color:white;font-weight:700}
+  .muted{font-size:0.9rem;color:#607089}
+  .small-link{font-size:0.9rem;color:var(--du-blue);text-decoration:none}
+  @media (max-width:900px){.login-card{flex-direction:column}.login-right{width:100%;padding:22px}.login-left{padding:26px}}
+  .footer-compact{margin-top:8px;font-size:0.9rem;color:#6b7280}
+  .developer-link{color:var(--du-blue);font-weight:700;text-decoration:none}
+  </style>
+
+<div class="login-wrap">
+  <div class="login-card" role="main">
+    <div class="login-left">
+      <h2>Welcome to DUTP</h2>
+      <p>Secure campus transportation booking for students and staff — fast, reliable, and easy to use.</p>
+      <div class="left-features">
+        <div class="feat"><i class="fas fa-bus"></i><div>Live routes & schedules</div></div>
+        <div class="feat"><i class="fas fa-ticket-alt"></i><div>Easy booking</div></div>
+        <div class="feat"><i class="fas fa-shield-alt"></i><div>Secure access</div></div>
+      </div>
+      <div style="margin-top:12px;color:#475569">Need help? Contact <a href="mailto:admin@daffodilvarsity.edu.bd" class="small-link">admin@daffodilvarsity.edu.bd</a></div>
+    </div>
+    <div class="login-right">
+      <div class="brand"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/Daffodil_International_University_Monogram.svg/140px-Daffodil_International_University_Monogram.svg.png" alt="du"><h3>DUTP Login</h3></div>
+
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button class="role-button active" id="role-student" onclick="setRoleClient('student')">Student</button>
+        <button class="role-button" id="role-admin" onclick="setRoleClient('admin')">Admin</button>
+      </div>
+
+      <form id="loginForm" method="POST">
+        <input type="hidden" name="role" id="loginRole" value="student">
+        <div class="form-group"><label for="identifier">Email / Username</label><input id="identifier" type="text" name="identifier" required autocomplete="username"></div>
+        <div class="form-group"><label for="password">Password</label><input id="password" type="password" name="password" required autocomplete="current-password"></div>
+        <button class="btn-primary" type="submit"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+      </form>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+        <div class="muted">Don't have an account? <a href="{{ url_for('register') }}" class="small-link">Register</a></div>
+        <div><a href="#" class="small-link">Forgot password?</a></div>
+      </div>
+
+      
+
+    </div>
+  </div>
+</div>
+
+<script>
+function setRoleClient(role){document.getElementById('loginRole').value=role;document.getElementById('role-student').classList.toggle('active',role==='student');document.getElementById('role-admin').classList.toggle('active',role==='admin');}
+// Registration uses a dedicated page now; link points to /register
+// simple submit loader
+document.getElementById('loginForm').addEventListener('submit',function(e){var btn=this.querySelector('button[type=submit]');btn.disabled=true;btn.innerHTML='Signing in...';});
+</script>
+
+{% endblock %}

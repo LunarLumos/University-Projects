@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routes & Buses • DUTP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border-radius: 16px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .header h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .route-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .route-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 0;
+        }
+
+        .route-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6c757d;
+        }
+
+        .info-item i {
+            color: var(--primary);
+        }
+
+        .bus-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .bus-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border: none;
+        }
+
+        .bus-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: middle;
+        }
+
+        .bus-table tr:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .bus-number {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .driver-name {
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .capacity-badge {
+            background: var(--success);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .time-display {
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-family: 'Courier New', monospace;
+        }
+
+        .availability {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .available-seats {
+            background: #28a745;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .booked-seats {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .book-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .book-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .book-btn:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .no-buses {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .no-buses i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #e9ecef;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .route-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .route-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .bus-table {
+                font-size: 0.9rem;
+            }
+
+            .bus-table th,
+            .bus-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.history.back()">
+        <i class="fas fa-arrow-left me-2"></i>Back
+    </button>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-route me-2"></i>Available Routes & Departure Times</h1>
+            <p class="text-muted">Book seats for your preferred route and time</p>
+            
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'info' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        {% for route_data in routes_with_buses %}
+        <div class="route-section">
+            <div class="route-header">
+                <h2 class="route-title">{{ route_data.route.route_name }}</h2>
+                {% if is_admin %}
+                <span class="badge badge-primary">Admin Access</span>
+                {% else %}
+                <span class="badge badge-success">Student Access</span>
+                {% endif %}
+            </div>
+
+            <div class="route-info">
+                <div class="info-item">
+                    <i class="fas fa-road"></i>
+                    <span>{{ route_data.route.distance }} km • {{ route_data.route.duration }} minutes</span>
+                </div>
+            </div>
+
+            <!-- Direction Tabs -->
+            <ul class="nav nav-tabs mb-3" id="directionTabs-{{ route_data.route.route_id }}" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="to-campus-tab-{{ route_data.route.route_id }}" data-toggle="tab" href="#to-campus-{{ route_data.route.route_id }}" role="tab">
+                        <i class="fas fa-arrow-right"></i> To Campus ({{ route_data.route.end_point }} → {{ route_data.route.start_point }})
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="from-campus-tab-{{ route_data.route.route_id }}" data-toggle="tab" href="#from-campus-{{ route_data.route.route_id }}" role="tab">
+                        <i class="fas fa-arrow-left"></i> From Campus ({{ route_data.route.start_point }} → {{ route_data.route.end_point }})
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="directionTabsContent-{{ route_data.route.route_id }}">
+                <!-- To Campus Direction -->
+                                <!-- To Campus Direction -->
+                <div class="tab-pane fade show active" id="to-campus-{{ route_data.route.route_id }}" role="tabpanel">
+                    <h6 class="text-primary mb-3"><i class="fas fa-arrow-right"></i> Available departures to campus</h6>
+                    {% set has_available_times = route_data.to_campus_times | selectattr('is_available') | list %}
+                    {% if has_available_times %}
+                    <div class="row">
+                        {% for time_data in route_data.to_campus_times %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title time-display">{{ time_data.time.strftime('%I:%M %p') }}</h5>
+                                    <p class="card-text">
+                                        {% if time_data.is_available %}
+                                        <span class="available-seats">{{ time_data.available_seats }} seats available</span>
+                                        {% elif not time_data.is_bookable %}
+                                        <span class="text-muted">Booking closed (departure too soon)</span>
+                                        {% else %}
+                                        <span class="text-danger">Fully booked</span>
+                                        {% endif %}
+                                    </p>
+                                    {% if time_data.is_available %}
+                                    <button class="btn book-btn w-100" 
+                                            data-route-id="{{ route_data.route.route_id }}" 
+                                            data-time="{{ time_data.time.strftime('%H:%M') }}"
+                                            data-direction="to_campus"
+                                            onclick="bookSeat(this)">
+                                        <i class="fas fa-ticket-alt me-1"></i>Book Seat
+                                    </button>
+                                    {% else %}
+                                    <button class="btn btn-secondary w-100" disabled>
+                                        {% if not time_data.is_bookable %}
+                                        <i class="fas fa-clock"></i> Too Late to Book
+                                        {% else %}
+                                        <i class="fas fa-users"></i> Fully Booked
+                                        {% endif %}
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-buses">
+                        <i class="fas fa-clock"></i>
+                        <h6>No buses available</h6>
+                        <p>All buses for today are either fully booked or have already departed.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- From Campus Direction -->
+                <div class="tab-pane fade" id="from-campus-{{ route_data.route.route_id }}" role="tabpanel">
+                    <h6 class="text-warning mb-3"><i class="fas fa-arrow-left"></i> Available departures from campus</h6>
+                    {% set has_available_times = route_data.from_campus_times | selectattr('is_available') | list %}
+                    {% if has_available_times %}
+                    <div class="row">
+                        {% for time_data in route_data.from_campus_times %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title time-display">{{ time_data.time.strftime('%I:%M %p') }}</h5>
+                                    <p class="card-text">
+                                        {% if time_data.is_available %}
+                                        <span class="available-seats">{{ time_data.available_seats }} seats available</span>
+                                        {% elif not time_data.is_bookable %}
+                                        <span class="text-muted">Booking closed (departure too soon)</span>
+                                        {% else %}
+                                        <span class="text-danger">Fully booked</span>
+                                        {% endif %}
+                                    </p>
+                                    {% if time_data.is_available %}
+                                    <button class="btn book-btn w-100" 
+                                            data-route-id="{{ route_data.route.route_id }}" 
+                                            data-time="{{ time_data.time.strftime('%H:%M') }}"
+                                            data-direction="from_campus"
+                                            onclick="bookSeat(this)">
+                                        <i class="fas fa-ticket-alt me-1"></i>Book Seat
+                                    </button>
+                                    {% else %}
+                                    <button class="btn btn-secondary w-100" disabled>
+                                        {% if not time_data.is_bookable %}
+                                        <i class="fas fa-clock"></i> Too Late to Book
+                                        {% else %}
+                                        <i class="fas fa-users"></i> Fully Booked
+                                        {% endif %}
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-buses">
+                        <i class="fas fa-clock"></i>
+                        <h6>No buses available</h6>
+                        <p>All buses for today are either fully booked or have already departed.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- From Campus Direction -->
+                <div class="tab-pane fade" id="from-campus-{{ route_data.route.route_id }}" role="tabpanel">
+                    <h6 class="text-warning mb-3"><i class="fas fa-arrow-left"></i> Available departures from campus</h6>
+                    {% set has_available_times = route_data.available_times | selectattr('is_available') | list %}
+                    {% if has_available_times %}
+                    <div class="row">
+                        {% for time_data in route_data.available_times %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title time-display">{{ time_data.time.strftime('%I:%M %p') }}</h5>
+                                    <p class="card-text">
+                                        {% if time_data.is_available %}
+                                        <span class="available-seats">{{ time_data.available_seats }} seats available</span>
+                                        {% elif not time_data.is_bookable %}
+                                        <span class="text-muted">Booking closed (departure too soon)</span>
+                                        {% else %}
+                                        <span class="text-danger">Fully booked</span>
+                                        {% endif %}
+                                    </p>
+                                    {% if time_data.is_available %}
+                                    <button class="btn book-btn w-100" 
+                                            data-route-id="{{ route_data.route.route_id }}" 
+                                            data-time="{{ time_data.time.strftime('%H:%M') }}"
+                                            data-direction="from_campus"
+                                            onclick="bookSeat(this)">
+                                        <i class="fas fa-ticket-alt me-1"></i>Book Seat
+                                    </button>
+                                    {% else %}
+                                    <button class="btn btn-secondary w-100" disabled>
+                                        {% if not time_data.is_bookable %}
+                                        <i class="fas fa-clock"></i> Too Late to Book
+                                        {% else %}
+                                        <i class="fas fa-users"></i> Fully Booked
+                                        {% endif %}
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-buses">
+                        <i class="fas fa-clock"></i>
+                        <h6>No buses available</h6>
+                        <p>All buses for today are either fully booked or have already departed.</p>
+                    </div>
+                    {% endif %}
+                </div>                <!-- From Campus Direction -->
+                <div class="tab-pane fade" id="from-campus-{{ route_data.route.route_id }}" role="tabpanel">
+                    <h6 class="text-warning mb-3"><i class="fas fa-arrow-left"></i> Available departures from campus</h6>
+                    {% if route_data.available_times %}
+                    <div class="row">
+                        {% for time_data in route_data.available_times %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title time-display">{{ time_data.time.strftime('%I:%M %p') }}</h5>
+                                    <p class="card-text">
+                                        <span class="available-seats">{{ time_data.available_seats }} seats available</span>
+                                    </p>
+                                    <button class="btn book-btn w-100" 
+                                            data-route-id="{{ route_data.route.route_id }}" 
+                                            data-time="{{ time_data.time.strftime('%H:%M') }}"
+                                            data-direction="from_campus"
+                                            onclick="bookSeat(this)">
+                                        <i class="fas fa-ticket-alt me-1"></i>Book Seat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-buses">
+                        <i class="fas fa-clock"></i>
+                        <h6>No available departures</h6>
+                        <p>All buses for today are either fully booked or have already departed.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not routes_with_buses %}
+        <div class="route-section">
+            <div class="no-buses">
+                <i class="fas fa-route"></i>
+                <h5>No routes available</h5>
+                <p>Check back later for available routes and buses.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Initialize tabs when document is ready
+        $(document).ready(function() {
+            // Initialize all Bootstrap tabs
+            $('.nav-tabs a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+            
+            // Set default active tab for each route
+            {% for route_data in routes_with_buses %}
+            $('#to-campus-tab-{{ route_data.route.route_id }}').tab('show');
+            {% endfor %}
+        });
+
+        async function bookSeat(button) {
+            const routeId = button.getAttribute('data-route-id');
+            const departureTime = button.getAttribute('data-time');
+            const direction = button.getAttribute('data-direction');
+            
+            // Show loading state
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Booking...';
+            button.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('route_id', routeId);
+                formData.append('direction', direction);
+                formData.append('departure_time', departureTime);
+
+                const response = await fetch('/book', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`Booking successful!\n${result.message}\nBus: ${result.bus_number}\nSeat: ${result.seat_number}`);
+                    // Reload the page to update availability
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + (result.error || 'Booking failed'));
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                alert('Network error. Please try again.');
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+
+    </script>
+</body>
+</html>
